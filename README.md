@@ -10,11 +10,11 @@ It’s made up of two mini apps:
 
 Click **[here](https://www.youtube.com/watch?v=v23E7wb9Ykc)** to watch a video explaining the project.
 
-Click **[here](myHealth.py)** to view the source code for **🩺 myHealth**, the main module. You can run the program with the Linux command `python myHealth.py`.
+Click **[here](src/myHealth/myHealth.py)** to view the source code for **🩺 myHealth**, the main module. You can run the program with the Linux command `python myHealth.py`.
 
 ## 💊 myMedication
 
-Click **[here](medication.py)** to view the source code of the `medicine` module, where **💊 myMedication** is implemented.
+Click **[here](src/myHealth/medication.py)** to view the source code of the `medicine` module, where **💊 myMedication** is implemented.
 
 ### Menus & Exceptions
 To build menus that are interactive and easy to use, I employed extensive **exception handling** blocks to deal with invalid selections by users and guide them in navigating the menus.
@@ -68,7 +68,7 @@ When the user loads the database, a **comma-separated value (csv)** file contain
 
 ## 🔧 utility
 
-Click **[here](utility.py)** to view the source code of the `utility` module, where helper functions is implemented.
+Click **[here](src/myHealth/utility.py)** to view the source code of the `utility` module, where helper functions is implemented.
 
 ### Helper Functions & Decorators
 
@@ -78,7 +78,7 @@ I abstracted away the screen clearing functionality by implementing it as a **de
 
 ## 🧪 test_medicine
 
-Click **[here](test_medication.py)** to view the source code of the `test_medicine` module, where the unit tests for the `medicine` module are implemented.
+Click **[here](test/test_medication.py)** to view the source code of the `test_medicine` module, where the unit tests for the `medicine` module are implemented.
 You can run the tests with [Pytest](https://docs.pytest.org/en/8.2.x/index.html) using the Linux command `pytest test_medication.py`, or with [unittest](https://docs.python.org/3/library/unittest.html) using the Linux command `python test_medication.py`.
 
 ### Unit Testing
@@ -91,7 +91,7 @@ It is important for my app to be tested in a controlled environment where the st
 - Moreover, I was able to confirm that my code worked as expected, by **‘asserting’** the number of calls made to the patched functions.
 
 ## 🫀 myVitals
-Click **[here](vitals.py)** to view the source code of the `vitals` module, where **🫀 myVitals** is implemented.
+Click **[here](src/myHealth/vitals.py)** to view the source code of the `vitals` module, where **🫀 myVitals** is implemented.
 
 ### File I/O
 
@@ -110,7 +110,7 @@ Instead of using Panda’s query function or SQL to find records from a particul
 2. Once a match is found, the `crawler` function is called. It will gather all the records from the same day or month, by checking adjacent records recursively.
 
 ### Graphing with Matplotlib
-Click **[here](visualisation.py)** to view the source code of the `visualisation` module, where the graphing is implemented.
+Click **[here](src/myHealth/visualisation.py)** to view the source code of the `visualisation` module, where the graphing is implemented.
 
 To help the patient and their doctor interpret the data conveniently, I used [Matplotlib](https://matplotlib.org/stable/) to present the data as beautiful, colourful charts.
 
