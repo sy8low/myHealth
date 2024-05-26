@@ -1,0 +1,12 @@
+name,purpose,dose,units,times
+levothyroxine,hypothyroidism,75.0,mcg,"{'BB': 1, 'AB': 0, 'BL': 0, 'AL': 0, 'BD': 0, 'AD': 0, 'AAWN': 0}"
+felodipine (plendil),hypertension,10.0,mg,"{'BB': 0, 'AB': 1, 'BL': 0, 'AL': 0, 'BD': 0, 'AD': 0, 'AAWN': 0}"
+bisoprolol,hypertension,5.0,mg,"{'BB': 0, 'AB': 1, 'BL': 0, 'AL': 0, 'BD': 0, 'AD': 0, 'AAWN': 0}"
+atorvastatin,cholesterol,20.0,mg,"{'BB': 0, 'AB': 0, 'BL': 0, 'AL': 0, 'BD': 0, 'AD': 1, 'AAWN': 0}"
+spironolactone,hypertension,12.5,mg,"{'BB': 0, 'AB': 1, 'BL': 0, 'AL': 0, 'BD': 0, 'AD': 0, 'AAWN': 0}"
+prazosin hci,hypertension,1.5,mg,"{'BB': 0, 'AB': 1, 'BL': 0, 'AL': 1, 'BD': 0, 'AD': 1, 'AAWN': 0}"
+glyprin,blood thinning,0,,"{'BB': 0, 'AB': 1, 'BL': 0, 'AL': 0, 'BD': 0, 'AD': 0, 'AAWN': 0}"
+sangobion,iron supplementation,0,,"{'BB': 0, 'AB': 1, 'BL': 0, 'AL': 0, 'BD': 0, 'AD': 0, 'AAWN': 0}"
+vitamin c,vitamin supplementation,0,,"{'BB': 0, 'AB': 1, 'BL': 0, 'AL': 0, 'BD': 0, 'AD': 0, 'AAWN': 0}"
+insulin novamix 30,hyperglycemia,18.0,units,"{'BB': 1, 'AB': 0, 'BL': 0, 'AL': 0, 'BD': 1, 'AD': 0, 'AAWN': 0}"
+frusemide,edema,40.0,mg,"{'BB': 0, 'AB': 0, 'BL': 0, 'AL': 0, 'BD': 0, 'AD': 0, 'AAWN': 1}"

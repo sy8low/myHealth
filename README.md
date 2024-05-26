@@ -68,7 +68,7 @@ When the user loads the database, a **comma-separated value (csv)** file contain
 
 ## 🔧 utility
 
-Click **[here](src/myHealth/utility.py)** to view the source code of the `utility` module, where helper functions is implemented.
+Click **[here](src/myHealth/utility.py)** to view the source code of the `utility` module, where helper functions are implemented.
 
 ### Helper Functions & Decorators
 
