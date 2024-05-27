@@ -149,10 +149,10 @@ I chose to present the data on the patient’s blood glucose level in two ways:
 If you’d like to download **🩺 myHealth**, you can find it on:
 
 - [**GitHub**](https://github.com/sy8low/myHealth)
-- [**Python Package Index (PYPI)**](https://pypi.org/project/myHealth/)
+- [**Python Package Index (PYPI)**](https://pypi.org/project/myHealth/1.0/)
 
 You can also download it through your command line using the **package installer for Python**, by executing the following Linux command:
 
-`pip install myHealth`
+`pip install myHealth==1.0`
 
 The documentation for **🩺 myHealth** can be found on [ReadtheDocs](https://myhealth.readthedocs.io/en/latest/) (in development).
