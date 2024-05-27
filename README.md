@@ -12,20 +12,23 @@ Click **[here](https://www.youtube.com/watch?v=v23E7wb9Ykc)** to watch a video e
 
 Click **[here](src/myHealth/myHealth.py)** to view the source code for **🩺 myHealth**, the main module. You can run the program with the Linux command `python myHealth.py`.
 
+The package comes with two csv files, [myMedication.csv](src/myHealth/myMedication.csv) and [myVitals.csv](src/myHealth/myVitals.csv), which contain sample data that you can use to try out **🩺 myHealth**. If you'd like to start afresh, you can either delete the files or rename them.
+
 ## 💊 myMedication
 
 Click **[here](src/myHealth/medication.py)** to view the source code of the `medicine` module, where **💊 myMedication** is implemented.
 
 ### Menus & Exceptions
+
 To build menus that are interactive and easy to use, I employed extensive **exception handling** blocks to deal with invalid selections by users and guide them in navigating the menus.
 
 - The menus in **🩺 myHealth** are **'nested'**, with layered exception handling. This means that 'lower-level' menus will handle some exceptions, and 'bubble' the rest up to 'higher-level' menus where they are handled.
 
-    This makes it easier to redirect the user and stop certain processes when there are 'fatal errors'.
+  This makes it easier to redirect the user and stop certain processes when there are 'fatal errors'.
 
 - If processes are stopped prematurely, the data may be damaged. I prevented this by making two copies of the data before every process that manipulates it (adding, editing, removing), a **working copy** and a **backup copy**.
 
-    If the process is completed successfully, the manipulated **working copy** overrides the original; else, the **backup copy** is returned.
+  If the process is completed successfully, the manipulated **working copy** overrides the original; else, the **backup copy** is returned.
 
 - To ensure that every type of invalid input is mapped to a unique exception, I defined two custom exceptions, `DuplicateError` and `NoSelectionError`.
 
@@ -60,6 +63,7 @@ When the user loads the database, a **comma-separated value (csv)** file contain
 ### Input Validation
 
 **💊 myMedication** carries out robust input validation using two mechanisms:
+
 1. When a new medication is added, the `create` class method calls the **static methods** of the `Medicine` class to perform checks and re-prompt the user if necessary.
 
 2. When a medication is edited, **setter methods** are called instead. Since the attributes of the Medicine objects are designated as **‘properties’**, they cannot be changed without passing their corresponding setter’s checks. These will raise exceptions when invalid input is detected.
@@ -84,6 +88,7 @@ You can run the tests with [Pytest](https://docs.pytest.org/en/8.2.x/index.html)
 ### Unit Testing
 
 It is important for my app to be tested in a controlled environment where the states of the Medicine objects are certain. I achieved this using the `unittest.mock` library, which allowed me to:
+
 - substitute real `Medicine` objects with **mock objects**, whose attributes are predetermined.
 
 - The library also allowed me to **‘patch’**, that is simulate, real objects, functions, and modules, so that I could create **‘fixtures’**, which are predictable behaviors, side effects & return values.
@@ -91,6 +96,7 @@ It is important for my app to be tested in a controlled environment where the st
 - Moreover, I was able to confirm that my code worked as expected, by **‘asserting’** the number of calls made to the patched functions.
 
 ## 🫀 myVitals
+
 Click **[here](src/myHealth/vitals.py)** to view the source code of the `vitals` module, where **🫀 myVitals** is implemented.
 
 ### File I/O
@@ -110,39 +116,41 @@ Instead of using Panda’s query function or SQL to find records from a particul
 2. Once a match is found, the `crawler` function is called. It will gather all the records from the same day or month, by checking adjacent records recursively.
 
 ### Graphing with Matplotlib
+
 Click **[here](src/myHealth/visualisation.py)** to view the source code of the `visualisation` module, where the graphing is implemented.
 
 To help the patient and their doctor interpret the data conveniently, I used [Matplotlib](https://matplotlib.org/stable/) to present the data as beautiful, colourful charts.
 
 #### Blood Pressure & Pulse Rate
+
 ![BP scatter](media/BP%20scatter.png)
+
 - I plotted **line graphs** of the patient’s blood pressure and pulse rate in the same figure but on **separate axes**, so that their trends can be compared.
 
 - The **shaded band** indicates the patient’s pulse pressure, while the **dotted guidelines** signal whether the patient’s blood pressure and pulse rate are within healthy limits.
-    
-    These can assist doctors in diagnosing the patient’s risk of heart disease.
+  These can assist doctors in diagnosing the patient’s risk of heart disease.
 
 #### Blood Glucose Levels
-I chose to present the data on the patient’s blood glucose level in two ways:
 
+I chose to present the data on the patient’s blood glucose level in two ways:
 
 1. As a **scatterplot**, with data points colored according to a **colormap**.
 
-    To make it easier to monitor the trend, I plotted a **line graph** of the **3-reading moving average**.
+   To make it easier to monitor the trend, I plotted a **line graph** of the **3-reading moving average**.
 
-    ![Glucose scatter](media/Glucose%20scatter.png)
+   ![Glucose scatter](media/Glucose%20scatter.png)
 
 2. As a **histogram**, which shows the **proportion** of readings that are too high, too low, or within the healthy range.
 
-    ![Glucose histogram](media/Glucose%20hist.png)
+   ![Glucose histogram](media/Glucose%20hist.png)
 
-### Where to Find
+## Where to Find
 
 If you’d like to download **🩺 myHealth**, you can find it on:
 
-- [**GitHub**]()
-- [**Python Package Index (PYPI)**]()
+- [**GitHub**](https://github.com/sy8low/myHealth)
+- [**Python Package Index (PYPI)**](https://pypi.org/project/myHealth/)
 
 You can also download it through your command line using the **package installer for Python**, by executing the following Linux command:
 
-`pip install ___`
+`pip install myHealth`
