@@ -30,8 +30,128 @@
 
           <div class="body" role="main">
             
-  <section id="welcome-to-myhealth-s-documentation">
-<h1>Welcome to myHealth’s documentation!<a class="headerlink" href="#welcome-to-myhealth-s-documentation" title="Link to this heading">¶</a></h1>
+  <section id="module-src.myHealth">
+<span id="welcome-to-myhealth-s-documentation"></span><h1>Welcome to myHealth’s documentation!<a class="headerlink" href="#module-src.myHealth" title="Link to this heading">¶</a></h1>
+<p>myHealth is a Python app that helps patients generate simple personal medical history reports for doctor’s appointments.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The modules are:</p>
+<p>myHealth        : The main module which should be executed to run the programme.
+medication      : Implements myMedication, which stores key information about the patient’s medications,</p>
+<blockquote>
+<div><p>including their purpose, dosage, and dose times.</p>
+</div></blockquote>
+<p>vitals          : Implements myVitals, which tracks the patient’s vital signs (blood pressure, pulse, blood glucose levels).
+utility         : Implements helper functions and exceptions used in the user interface.
+visualisation   : Graphs the patient’s vitals records with beautiful, colourful charts.</p>
+</div>
+<p id="module-src.myHealth.utility">utility implements helper functions and exceptions used in the user interface.</p>
+<dl class="simple">
+<dt>Functions:</dt><dd><p>clear_screen
+clear_line
+clear_screen_deco   : Decorate a function such that the screen is cleared before its execution.
+repeat              : Decorate a function such that it is executed multiple times.
+clear_5_lines
+display             : Print a line of text on the terminal window and clear it after the stipulated period.
+clear_and_display   : Clear the screen before printing a line of text for a stipulated period.
+yes_or_no           : Implement a simple command-line “yes-or-no” selector.
+backtrack           : Allow the user to press the “enter” key to return to the parent menu.
+default_response (Not in use)</p>
+</dd>
+<dt>Exceptions:</dt><dd><p>DuplicateError          : Raise an exception if the user tries to create a duplicate Medicine object/vitals record.</p>
+</dd>
+</dl>
+<dl class="py exception">
+<dt class="sig sig-object py" id="src.myHealth.utility.DuplicateError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.myHealth.utility.</span></span><span class="sig-name descname"><span class="pre">DuplicateError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.myHealth.utility.DuplicateError" title="Link to this definition">¶</a></dt>
+<dd><p>Raise an exception if the user tries to create a Medicine object with a name that is already taken.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.myHealth.utility.DuplicateError.msg">
+<span class="sig-name descname"><span class="pre">msg</span></span><a class="headerlink" href="#src.myHealth.utility.DuplicateError.msg" title="Link to this definition">¶</a></dt>
+<dd><p>The error message to displayed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.myHealth.utility.backtrack">
+<span class="sig-prename descclassname"><span class="pre">src.myHealth.utility.</span></span><span class="sig-name descname"><span class="pre">backtrack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#src.myHealth.utility.backtrack" title="Link to this definition">¶</a></dt>
+<dd><p>Allow the user to press the “enter” key to return to the parent menu.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>target</strong> (<em>str</em>) – The name of the parent menu.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A redirection message to the user.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.myHealth.utility.clear_screen_deco">
+<span class="sig-prename descclassname"><span class="pre">src.myHealth.utility.</span></span><span class="sig-name descname"><span class="pre">clear_screen_deco</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.myHealth.utility.clear_screen_deco" title="Link to this definition">¶</a></dt>
+<dd><p>Decorate a function such that the screen is cleared before its execution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>function</em>) – The function to be decorated.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The decorated function.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.myHealth.utility.display">
+<span class="sig-prename descclassname"><span class="pre">src.myHealth.utility.</span></span><span class="sig-name descname"><span class="pre">display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pause</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#src.myHealth.utility.display" title="Link to this definition">¶</a></dt>
+<dd><p>Print a line of text on the terminal window and clear it after the stipulated period.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> – The line of text to be displayed.</p></li>
+<li><p><strong>pause</strong> (<em>optional</em>) – The time to elapse before the text is cleared.
+Defaults to 3.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.myHealth.utility.repeat">
+<span class="sig-prename descclassname"><span class="pre">src.myHealth.utility.</span></span><span class="sig-name descname"><span class="pre">repeat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.myHealth.utility.repeat" title="Link to this definition">¶</a></dt>
+<dd><p>Decorate a function such that it is executed multiple times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reps</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of repetitions. Defaults to 2.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.myHealth.utility.yes_or_no">
+<span class="sig-prename descclassname"><span class="pre">src.myHealth.utility.</span></span><span class="sig-name descname"><span class="pre">yes_or_no</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#src.myHealth.utility.yes_or_no" title="Link to this definition">¶</a></dt>
+<dd><p>Implement a simple command-line “yes-or-no” selector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prompt</strong> – The instructions to be displayed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The user’s choice.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="toctree-wrapper compound">
 </div>
 </section>
