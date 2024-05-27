@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "myHealth"
 description = "A Python app that helps patients generate simple personal medical history reports for doctor's appointments."
 version = "1.0"
-requires-python = ">= 3"
+requires-python = ">= 3.0"
 
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -30,7 +30,7 @@ keywords = ["cs50", "healthcare", "matplotlib", "numpy", "pandas", "pytest", "ob
             "unit test", "command line", "recursion", "algorithm", "data", "data science", "data analytics", "statistics"]
 
 classifiers = [
-  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
   "License :: OSI Approved :: GNU Affero General Public License v3",
   "Operating System :: OS Independent",
   "Development Status :: 5 - Production/Stable",
