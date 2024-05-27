@@ -8,18 +8,6 @@ Welcome to myHealth's documentation!
 .. automodule:: src.myHealth.myHealth
    :members:
 
-.. automodule:: src.myHealth.medication
-   :members:
-
-.. automodule:: src.myHealth.vitals
-   :members:
-
-.. automodule:: src.myHealth.utility
-   :members:
-
-.. automodule:: src.myHealth.visualisation
-   :members:
-
 
 .. toctree::
    :maxdepth: 2
