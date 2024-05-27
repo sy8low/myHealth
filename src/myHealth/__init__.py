@@ -1,6 +1,8 @@
 """myHealth is a Python app that helps patients generate simple personal medical history reports for doctor's appointments.
 
-Modules:
+Note:
+    The modules are:
+    
     myHealth        : The main module which should be executed to run the programme.
     medication      : Implements myMedication, which stores key information about the patient's medications,
                       including their purpose, dosage, and dose times.

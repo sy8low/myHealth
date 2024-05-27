@@ -155,4 +155,4 @@ You can also download it through your command line using the **package installer
 
 `pip install myHealth`
 
-The documentation for **🩺 myHealth** can be found on [ReadtheDocs](https://myhealth.readthedocs.io/en/latest/)
+The documentation for **🩺 myHealth** can be found on [ReadtheDocs](https://myhealth.readthedocs.io/en/latest/) (in development).

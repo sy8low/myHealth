@@ -361,7 +361,8 @@ class Medicine:
 def med_menu() -> None:
     """Load medications and display the menu for myMedication.
     
-    Options: View, Add, Edit, Remove, Undo All Changes, Save and Go Back.
+    Note:
+        The options are: View, Add, Edit, Remove, Undo All Changes, Save and Go Back.
     """
     
     MED_MENUS = [
@@ -492,7 +493,8 @@ def save_medication(med_data: list[Medicine]) -> str:
 def view_menu_med(meddb: list[Medicine]) -> None:
     """Display the options for viewing the Medicine objects, and implements the same.
 
-    Options: View All, Find, Back to myMedication.
+    Note:
+        The options are: View All, Find, Back to myMedication.
         
     Args:
         The list of Medicine objects, held in RAM.

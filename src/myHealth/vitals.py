@@ -56,7 +56,8 @@ VITALS_FILENAME = "myVitals.csv"
 def vitals_menu() -> None:
     """Load vitals records and display the menu for myVitals.
     
-    Options: View, Add, Edit, Remove, Undo All Changes, Save and Go Back.
+    Note:
+        The options are: View, Add, Edit, Remove, Undo All Changes, Save and Go Back.
     """
     
     VITAL_MENUS = [
@@ -172,7 +173,8 @@ def save_vitals(vitalsdb: pd.DataFrame) -> str:
 def view_menu_vitals(vitalsdb: pd.DataFrame) -> None:
     """Display the options for viewing the entries in the Pandas DataFrame, and implement the same.
 
-    Options: View All, View Latest, Find, Back to myVitals.
+    Note:
+        The options are: View All, View Latest, Find, Back to myVitals.
     
     Implementation:
         1. Get a date from the user (if necessary).
@@ -253,7 +255,8 @@ def view_menu_vitals(vitalsdb: pd.DataFrame) -> None:
 def select_timeframe(vitalsdb: pd.DataFrame, target: pd.Timestamp) -> pd.DataFrame:
     """Filter the DataFrame to include only records within a certain time period from the target date.
 
-    Options: View Selected Record, View All from the Same Day/Month, View Records Before it, Go Back.
+    Note:
+        The options are: View Selected Record, View All from the Same Day/Month, View Records Before it, Go Back.
     
     Args:
         vitalsdb: The full Pandas DataFrame.
@@ -349,7 +352,8 @@ def select_timeframe(vitalsdb: pd.DataFrame, target: pd.Timestamp) -> pd.DataFra
 def select_data(selected_timeframe: pd.DataFrame) -> pd.DataFrame:
     """Filter the DataFrame further to include only the data that the user wants to view. 
 
-    Options: View 1. All; 2. Blood Glucose; 3. BP; 4. Pulse; 5. BP and Pulse; 6. Go Back.
+    Note:
+        The options are: View 1. All; 2. Blood Glucose; 3. BP; 4. Pulse; 5. BP and Pulse; 6. Go Back.
     
     Args:
         selected_timeframe: The DataFrame filtered by time.
@@ -436,7 +440,8 @@ def filter_selected_data(selected_data: pd.DataFrame, columns: list[str]) -> pd.
 def view_options(filtered_data: pd.DataFrame) -> None:
     """Select how the data is to be visualised, and implements the same.
 
-    Options: Table, Graph, Go Back.
+    Note:
+        The options are: Table, Graph, Go Back.
         
     Args:
         filtered_data: The DataFrame filtered by time and columns.
