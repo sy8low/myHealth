@@ -40,7 +40,7 @@ classifiers = [
 
 [project.urls]
 Source = "src/myHealth/myHealth.py"
-Documentation = ""
+Documentation = "https://myhealth.readthedocs.io/en/latest/"
 Repository = "https://github.com/sy8low/myHealth"
 Changelog = "CHANGELOG.md"
 PyPI = "https://pypi.org/project/myHealth/"

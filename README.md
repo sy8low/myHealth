@@ -154,3 +154,5 @@ If you’d like to download **🩺 myHealth**, you can find it on:
 You can also download it through your command line using the **package installer for Python**, by executing the following Linux command:
 
 `pip install myHealth`
+
+The documentation for **🩺 myHealth** can be found on [ReadtheDocs](https://myhealth.readthedocs.io/en/latest/)
