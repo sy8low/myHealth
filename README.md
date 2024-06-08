@@ -52,7 +52,9 @@ I employed an **object-oriented paradigm** to represent medications in my progra
 
 Let’s look at what happens under the hood when a user interacts with **💊 myMedication**.
 
-When the user loads the database, a **comma-separated value (csv)** file containing information about the medications is converted into a list of `Medicine` objects with the help of Python’s `csv` module.
+When the user loads the database, a **comma-separated value (csv)** file containing information about the medications is converted into a list of `Medicine` objects with a **serialiser** I implemented with the help of Python’s `csv` module.
+
+When the user quits the app, the `Medicine` objects are written into the csv file using another serialiser.
 
 ### Creating Medicine Objects
 
