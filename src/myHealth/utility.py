@@ -17,6 +17,7 @@ Exceptions:
 """
 
 import time
+import functools
 
 def clear_screen() -> None:
     print("\033c", "\033[H", sep="", end="")
@@ -25,8 +26,6 @@ def clear_screen() -> None:
 def clear_line() -> None:
     print("\033[2K", "\033[1F", "\033[0K", sep="", end="")
 
-
-# TODO: @functools.wrap(func)
 
 def clear_screen_deco(func):
     """Decorate a function such that the screen is cleared before its execution.
@@ -38,6 +37,7 @@ def clear_screen_deco(func):
         function: The decorated function.
     """
     
+    @functools.wrap(func)
     def wrapper(*args, **kwargs):
         clear_screen()
         func(*args, **kwargs)
@@ -50,8 +50,9 @@ def repeat(reps: int=2):
     Args:
         reps (int, optional): The number of repetitions. Defaults to 2.
     """
+    
     def deco_repeat(func):
-        # TODO: @functools.wrap(func)
+        @functools.wrap(func)
         def wrapper_repeat(*args, **kwargs):
             for _ in range(reps):
                 value = func(*args, **kwargs)
@@ -73,6 +74,7 @@ def display(text, pause: int=3) -> None:
         pause (optional): The time to elapse before the text is cleared.
             Defaults to 3.
     """
+        
     print(text)
     time.sleep(pause)
     print("\033[2F", "\033[0J", sep="", end="")
@@ -87,6 +89,7 @@ def clear_and_display(text, pause: int=3) -> None:
         pause (optional): The time that will elapse before the text is cleared.
                                Defaults to 3.
     """
+    
     print(text)
     time.sleep(pause)
     print("\033[2F", "\033[0J", sep="", end="")
@@ -101,6 +104,7 @@ def yes_or_no(prompt: str) -> bool:
     Returns:
         The user's choice.
     """
+    
     while True:
         response = input(prompt + "(Y/N) ").lower().strip()
         match response:
@@ -123,6 +127,7 @@ def backtrack(target: str) -> str:
     Returns:
         str: A redirection message to the user.
     """
+    
     while True:
         if not input(f"\nPress enter to return to {target}."):
             return f"Returning to {target}..."
@@ -148,4 +153,5 @@ class DuplicateError (Exception):
             name: The name/datetime that is already taken.
             destination: The name of the menu where the user will be redirected to.
         """
+        
         self.msg = f"A record for {name} already exists. Returning to {destination}..."
