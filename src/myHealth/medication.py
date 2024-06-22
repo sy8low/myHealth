@@ -440,10 +440,6 @@ def load_medication() -> tuple[list[Medicine], str]:
     Note:
         An empty file will be created if one doesn't already exist.
 
-    Args:
-        file_name (optional): 
-            Defaults to MED_FILENAME.
-
     Returns:
         A list of Medicine objects and a success/failure message to the user.
     """
