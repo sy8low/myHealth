@@ -11,12 +11,11 @@ Functions:
     glucose_hist        : Create a histogram of the patient's blood glucose levels.
 """ 
 
-import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import utility
-
 
 GLUCOSE_COLOURS = np.array([
     [0/256, 255/256, 255/256, 1],  # Turquoise

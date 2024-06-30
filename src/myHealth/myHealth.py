@@ -1,10 +1,10 @@
 """myHealth is the main module which should be executed to run the programme."""
 
-from tabulate import tabulate
-import sys
 import medication
-import vitals
+import sys
+from tabulate import tabulate
 import utility
+import vitals
 
 MAIN_MENU: list[dict]= [
     {"Index": 1, "Menu": "myMedication"},

@@ -36,16 +36,16 @@ Exceptions:
     NoSelectionError        : Raise an exception if the user chooses not to proceed with an action.
 """
 
-from tabulate import tabulate
-import pandas as pd
-import numpy as np
-import warnings
-import re
-from datetime import datetime, date, time
-from os.path import exists
 import csv
+from datetime import datetime, date, time
+import numpy as np
+from os.path import exists
+import pandas as pd
+import re
+from tabulate import tabulate
 import utility
 import visualisation
+import warnings
 
 VITALS_HEADERS = ["datetime", "sys", "dia", "pulse", "glucose"]
 """A list of columns in the vitals database."""
