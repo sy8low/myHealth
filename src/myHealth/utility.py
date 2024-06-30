@@ -16,8 +16,8 @@ Exceptions:
     DuplicateError          : Raise an exception if the user tries to create a duplicate Medicine object/vitals record.
 """
 
-import time
-import functools
+from functools import wraps
+from time import sleep
 
 def clear_screen() -> None:
     print("\033c", "\033[H", sep="", end="")
@@ -37,7 +37,7 @@ def clear_screen_deco(func):
         function: The decorated function.
     """
     
-    @functools.wrap(func)
+    @wraps(func)
     def wrapper(*args, **kwargs):
         clear_screen()
         func(*args, **kwargs)
@@ -52,7 +52,7 @@ def repeat(reps: int=2):
     """
     
     def deco_repeat(func):
-        @functools.wrap(func)
+        @wraps(func)
         def wrapper_repeat(*args, **kwargs):
             for _ in range(reps):
                 value = func(*args, **kwargs)
@@ -76,7 +76,7 @@ def display(text, pause: int=3) -> None:
     """
         
     print(text)
-    time.sleep(pause)
+    sleep(pause)
     print("\033[2F", "\033[0J", sep="", end="")
 
 
@@ -91,7 +91,7 @@ def clear_and_display(text, pause: int=3) -> None:
     """
     
     print(text)
-    time.sleep(pause)
+    sleep(pause)
     print("\033[2F", "\033[0J", sep="", end="")
 
     
