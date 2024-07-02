@@ -20,10 +20,10 @@ Functions:
 """
 
 import csv
+import myHealth.utility as utility
 from os.path import exists
 from tabulate import tabulate
 from time import perf_counter
-import utility
 
 MED_FILENAME = "myMedication.csv"
 """The name of the csv file in the present working directory that stores the data in disc."""
@@ -459,7 +459,8 @@ def load_medication() -> tuple[list[Medicine], str]:
             med_data.append(Medicine(med["name"], med["purpose"], float(med["dose"]), med["units"], eval(med["times"])))
     
     end = perf_counter()
-    return med_data, f"Medications loaded successfully. {end - start:.5f} seconds."
+    utility.clear_and_display(f"{end - start:.5f} seconds.")
+    return med_data, "Medications loaded successfully."
 
 
 def save_medication(med_data: list[Medicine]) -> str:
@@ -486,8 +487,9 @@ def save_medication(med_data: list[Medicine]) -> str:
                 "times": med._times,
             })
     
-    end = perf_counter()        
-    return f"Medications saved successfully, returning to Main Menu. {end - start:.5f} seconds."
+    end = perf_counter()   
+    utility.clear_and_display(f"{end - start:.5f} seconds.")     
+    return f"Medications saved successfully, returning to Main Menu."
 
 
 # TODO: Display as table.
@@ -689,7 +691,8 @@ def add_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
         new_med_data.append(new_med)
         
         end = perf_counter()
-        return new_med_data, f"{new_med.name.title()} successfully added. {end - start:.5f} seconds. Returning to myMedication..."
+        utility.clear_and_display(f"{end - start:.5f} seconds.")
+        return new_med_data, f"{new_med.name.title()} successfully added. Returning to myMedication..."
     
     except KeyboardInterrupt:
         return backup, "\nAction disrupted. No changes will be made. Returning to myMedication..."
