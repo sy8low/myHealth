@@ -1,7 +1,8 @@
+# Solution provided by https://py-pkgs.org/05-testing.html#test-structure.
+from myHealth.medication import *
+import myHealth.utility as utility
 import unittest
 from unittest.mock import *
-from medication import *
-import utility
 
 class mock_entries:
     """Encapsulates sample entries used for testing."""
