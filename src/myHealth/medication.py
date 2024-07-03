@@ -19,10 +19,14 @@ Functions:
 """
 
 import csv
-import myHealth.utility as utility
 from os.path import exists
 from tabulate import tabulate
 from time import perf_counter
+
+try:
+    import myHealth.utility as utility
+except ModuleNotFoundError:
+    import utility
 
 MED_FILENAME = "myMedication.csv"
 """The name of the csv file in the present working directory that stores the data in disc."""
