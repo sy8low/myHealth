@@ -13,7 +13,6 @@ Functions:
     view_menu_med       : Display the options for viewing the Medicine objects, and implements the same.
     query               : Prepare a query of the database based on user input.
     select_medication   : Search the database with the query generated.
-    view_medication (Not in use)
     add_medication      : Construct a new Medicine object and append it to the list of Medicine objects, held in RAM.
     edit_medication     : Edit a Medicine object by calling the setters.
     remove_medication   : Remove a Medicine object from the list.
@@ -22,7 +21,12 @@ Functions:
 import csv
 from os.path import exists
 from tabulate import tabulate
-import utility
+from time import perf_counter
+
+try:
+    import myHealth.utility as utility
+except ModuleNotFoundError:
+    import utility
 
 MED_FILENAME = "myMedication.csv"
 """The name of the csv file in the present working directory that stores the data in disc."""
@@ -451,11 +455,14 @@ def load_medication() -> tuple[list[Medicine], str]:
     
     med_data = []
     with open(MED_FILENAME, newline="") as meddb:
+        start = perf_counter()
         reader = csv.DictReader(meddb)
         
         for med in reader:                
             med_data.append(Medicine(med["name"], med["purpose"], float(med["dose"]), med["units"], eval(med["times"])))
-        
+    
+    end = perf_counter()
+    utility.clear_and_display(f"{end - start:.5f} seconds.")
     return med_data, "Medications loaded successfully."
 
 
@@ -473,6 +480,7 @@ def save_medication(med_data: list[Medicine]) -> str:
         writer = csv.DictWriter(meddb, Medicine.MED_HEADERS)
         writer.writeheader()
         
+        start = perf_counter()
         for med in med_data:
             writer.writerow({
                 "name": med._name,
@@ -481,8 +489,10 @@ def save_medication(med_data: list[Medicine]) -> str:
                 "units": med._units,
                 "times": med._times,
             })
-            
-    return "Medications saved successfully, returning to Main Menu."
+    
+    end = perf_counter()   
+    utility.clear_and_display(f"{end - start:.5f} seconds.")     
+    return f"Medications saved successfully, returning to Main Menu."
 
 
 # TODO: Display as table.
@@ -513,24 +523,37 @@ def view_menu_med(meddb: list[Medicine]) -> None:
             match action:
                 case 1:  # View All Medications
                     utility.clear_and_display("Displaying all Medications...")
+                    
                     if meddb:
+                        start = perf_counter()
                         for med in meddb:
                             print(med)
+                            
+                        end = perf_counter()
+                        print(f"{end - start:.5f} seconds.")
+                        
                     else:
                         print("No medications to view.")
                         
-                    utility.backtrack("View Medication")
+                    utility.clear_and_display(utility.backtrack(f"View Medication"))
                     
                 case 2:  # Find a Medication
                     if meddb:
                         category, search = query()
+                        
+                        start = perf_counter()
                         results = select_medication(category, search, meddb)
+                        end = perf_counter()
+                        
                         for index in results:
                             print(meddb[index])
+                                                
+                        print(f"{end - start:.5f} seconds.")
+                        
                     else:
                         print("No medications to view.")
                     
-                    utility.backtrack("View Medication")
+                    utility.clear_and_display(utility.backtrack("View Medication"))
                         
                 case 3:  # Back to myMedication
                     utility.clear_and_display("Returning to myMedication...")
@@ -639,11 +662,6 @@ def select_medication(category: str, search: str, med_data: list[Medicine]) -> l
         raise KeyError("Medication not found.")
 
 
-# Use mapping. Allow for only specific features to be printed.
-def view_medication(medicine: Medicine) -> None:
-    pass
-
-
 def add_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
     """Construct a new Medicine object and append it to the list of Medicine objects, held in RAM.
 
@@ -656,18 +674,22 @@ def add_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
     
     # med_data is passed in as a reference to an object.
     # If amended, the underlying list itself will be amended in place without the need for a return value.
+    
     new_med_data = med_data.copy()
     backup = med_data.copy()
     
     try:
         new_med = Medicine.create()
         
+        start = perf_counter()
         for med in new_med_data:
             if med.name == new_med.name:
                 raise utility.DuplicateError(new_med.name, "myMedication")
         
         new_med_data.append(new_med)
         
+        end = perf_counter()
+        utility.clear_and_display(f"{end - start:.5f} seconds.")
         return new_med_data, f"{new_med.name.title()} successfully added. Returning to myMedication..."
     
     except KeyboardInterrupt:
@@ -701,10 +723,14 @@ def edit_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
         
         try:
             search = Medicine.get_non_empty_string("Which medication are you trying to edit? ")
+            
+            start = perf_counter()
             for i in range(len(new_med_data)):
                 if search in new_med_data[i].name:
                     target = new_med_data[i]
                     break
+            end = perf_counter()
+            utility.display(f"{end - start:.5f} seconds.")
             
             if target:
                 print(f"This is the entry for {target.name}", target, sep="\n")
@@ -825,11 +851,15 @@ def remove_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
         try:
             search = Medicine.get_non_empty_string("Which medication are you trying to delete? ")
             
+            start = perf_counter()
             for i in range(len(new_med_data)):
                 if search in new_med_data[i].name:
                     target = new_med_data[i]
                     target_index = i
                     break
+                
+            end = perf_counter()
+            utility.display(f"{end - start:.5f} seconds.")
             
             if target:
                 utility.clear_screen()

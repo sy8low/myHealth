@@ -1,7 +1,10 @@
+# Solved import resolution issues by using a virtual environment, and importing the
+# modules as modules of the myHealth package.
+# Solution provided by https://py-pkgs.org/05-testing.html#test-structure.
+from myHealth.medication import *
+import myHealth.utility as utility
 import unittest
 from unittest.mock import *
-from medication import *
-import utility
 
 class mock_entries:
     """Encapsulates sample entries used for testing."""
@@ -317,7 +320,7 @@ class mock_entries:
 
 
 class test_add_medication(unittest.TestCase):
-    @patch("medication.Medicine", autospec=True)
+    @patch("myHealth.medication.Medicine", autospec=True)
     # Issues with "target" fixed: add_medication will look up Medicine in medication, not locally. Only initial references can be localised.
     def test_add_valid(self, mock_Medicine):
         
@@ -328,7 +331,7 @@ class test_add_medication(unittest.TestCase):
         self.assertIn(mock_entries.mock_valid_panadol, new_mock_valid_medlist)
         self.assertEqual(message, f"{mock_entries.mock_valid_panadol.name.title()} successfully added. Returning to myMedication...")
     
-    @patch("medication.Medicine", autospec=True)
+    @patch("myHealth.medication.Medicine", autospec=True)
     def test_keyboard_interrupt(self, mock_Medicine):
         
         mock_Medicine.create.side_effect = KeyboardInterrupt
@@ -543,21 +546,21 @@ class test_load_medication(unittest.TestCase):
 
 
 class test_query(unittest.TestCase):
-    @patch("medication.utility")  # Local reference to the module created in medication.
+    @patch("myHealth.medication.utility")  # Local reference to the module created in medication.
     @patch.object(Medicine, "get_non_empty_string", side_effect=["non_existent", "", "name", "felodipine"])
     def test_query_name(self, mock_gnes, mock_utility):  # MagicMock created must be passed as argument into the decorated function.
         results = query()
         self.assertEqual(mock_gnes.call_count, 4)  # Remember that non-empty strings will be accepted here.
         self.assertTupleEqual(results, ("name", "felodipine"))
     
-    @patch("medication.utility")
+    @patch("myHealth.medication.utility")
     @patch.object(Medicine, "get_non_empty_string", side_effect=["purpose", "hypertension"])
     def test_query_purpose(self, mock_gnes, mock_utility):
         results = query()
         self.assertEqual(mock_gnes.call_count, 2)
         self.assertTupleEqual(results, ("purpose", "hypertension"))
     
-    @patch("medication.utility")
+    @patch("myHealth.medication.utility")
     @patch("builtins.input", side_effect=["AA", "bb"])
     @patch.object(Medicine, "get_non_empty_string", return_value="times")
     def test_query_times(self, mock_gnes, mock_input, mock_utility):

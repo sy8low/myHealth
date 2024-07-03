@@ -237,7 +237,7 @@ def view_menu_vitals(vitalsdb: pd.DataFrame) -> None:
 
             else:
                 print(selected_data.to_string())
-                utility.backtrack("View Vitals")
+                utility.clear_and_display(utility.backtrack("View Vitals"))
         
         except NoSelectionError as error:
             utility.display(error.msg)
@@ -487,7 +487,7 @@ def view_options(filtered_data: pd.DataFrame) -> None:
                 case _:
                     raise ValueError("Invalid option.")
 
-            utility.backtrack("View Options")
+            utility.clear_and_display(utility.backtrack("View Options"))
         
         except ValueError as error:
             utility.display(error) #"Please select a valid option."
