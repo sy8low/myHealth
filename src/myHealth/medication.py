@@ -13,7 +13,6 @@ Functions:
     view_menu_med       : Display the options for viewing the Medicine objects, and implements the same.
     query               : Prepare a query of the database based on user input.
     select_medication   : Search the database with the query generated.
-    view_medication (Not in use)
     add_medication      : Construct a new Medicine object and append it to the list of Medicine objects, held in RAM.
     edit_medication     : Edit a Medicine object by calling the setters.
     remove_medication   : Remove a Medicine object from the list.
@@ -657,11 +656,6 @@ def select_medication(category: str, search: str, med_data: list[Medicine]) -> l
         return results
     else:
         raise KeyError("Medication not found.")
-
-
-# Use mapping. Allow for only specific features to be printed.
-def view_medication(medicine: Medicine) -> None:
-    pass
 
 
 def add_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:

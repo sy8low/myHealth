@@ -10,8 +10,7 @@ Functions:
     clear_and_display   : Clear the screen before printing a line of text for a stipulated period.
     yes_or_no           : Implement a simple command-line "yes-or-no" selector.
     backtrack           : Allow the user to press the "enter" key to return to the parent menu.
-    default_response (Not in use)
-
+    
 Exceptions:
     DuplicateError          : Raise an exception if the user tries to create a duplicate Medicine object/vitals record.
 """
@@ -133,10 +132,6 @@ def backtrack(target: str) -> str:
             return f"Returning to {target}..."
         else:
             clear_line()
-
-            
-def default_response(default= "0") -> None:
-    pass
 
 
 class DuplicateError (Exception):
