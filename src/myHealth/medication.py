@@ -24,9 +24,11 @@ from tabulate import tabulate
 from time import perf_counter
 
 try:
-    import myHealth.utility as utility
+    # If run by interpreter
+    import utility    
 except ModuleNotFoundError:
-    import utility
+    # If run from the test module.
+    import myHealth.utility as utility
 
 MED_FILENAME = "myMedication.csv"
 """The name of the csv file in the present working directory that stores the data in disc."""

@@ -1,5 +1,5 @@
-# Solved import resolution issues by using a virtual environment, and importing the
-# modules as modules of the myHealth package.
+# Solved import resolution issues by using a virtual environment, and importing
+# as modules of the myHealth package.
 # Solution provided by https://py-pkgs.org/05-testing.html#test-structure.
 from myHealth.medication import *
 import myHealth.utility as utility
