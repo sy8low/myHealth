@@ -76,17 +76,17 @@ def bp_scatter(data: pd.DataFrame):
         ax1.fill_between(x, sys, dia, color="0.8", alpha=0.5)  # The alias "c" cannot be used. Please check the docs when passing args.
         ax1.legend(loc="upper left")
         
-    if "pulse" in data_copy.columns:
-        pulse = data_copy["pulse"]
-        ax1.set_title(f"Chart of Blood Pressure and Pulse Rate from {xmin} to {xmax}")
-                
-        ax2 = ax1.twinx()
-        ax2.set_ylabel("Pulse Rate (BPM)")
-        ax2.set_ylim(0, 200)
-        ax2.tick_params("y")
-        ax2.plot(x, pulse, c=BP_COLOURS["pulse"], scaley=True, label="Pulse")
-        ax2.axhline(y=90, c=BP_COLOURS["pulse"], alpha=0.5, ls="--", label="Tachycardia")  # Shifted down from 100 for visibility.
-        ax2.legend(loc="upper right")
+        if "pulse" in data_copy.columns:
+            pulse = data_copy["pulse"]
+            ax1.set_title(f"Chart of Blood Pressure and Pulse Rate from {xmin} to {xmax}")
+                    
+            ax2 = ax1.twinx()
+            ax2.set_ylabel("Pulse Rate (BPM)")
+            ax2.set_ylim(0, 200)
+            ax2.tick_params("y")
+            ax2.plot(x, pulse, c=BP_COLOURS["pulse"], scaley=True, label="Pulse")
+            ax2.axhline(y=90, c=BP_COLOURS["pulse"], alpha=0.5, ls="--", label="Tachycardia")  # Shifted down from 100 for visibility.
+            ax2.legend(loc="upper right")
         
     else:
         data_copy.dropna(subset="pulse", inplace=True)
