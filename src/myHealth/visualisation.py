@@ -60,7 +60,7 @@ def bp_scatter(data: pd.DataFrame):
     xmin, xmax = x.min(), x.max()
         
     fig, ax1 = plt.subplots()
-    ax1.set_xlabel("Datetime")
+    ax1.set_xlabel("Date")
     
     if "sys" in data_copy.columns and "dia" in data_copy.columns:           
         sys, dia = data_copy["sys"], data_copy["dia"]   
@@ -132,7 +132,7 @@ def glucose_scatter(data: pd.DataFrame):
     y_roll_mean = y.rolling(window=3, min_periods=1, center=False, closed="neither").mean()
             
     plt.figure()
-    plt.xlabel("Datetime")
+    plt.xlabel("Date")
     plt.ylabel("Blood Glucose Level (mmol/L)")
     plt.title(f"Chart of Blood Glucose Levels from {xmin} to {xmax}")
     plt.ylim(0, 30)
@@ -142,9 +142,9 @@ def glucose_scatter(data: pd.DataFrame):
     plt.scatter(x, y, c=y, cmap=glucose_colourmap(GLUCOSE_COLOURS), vmin=0, vmax=30)
     plt.plot(x, y_roll_mean, "k", label="Moving average (last 3 records)")
     plt.colorbar(ticks=[0, 6, 10, 15, 30])
-    plt.axhline(y=6, c="0.8", alpha=0.8, ls="--", label="Hypoglycemia")  # No such thing as glucose_colourmap.colours[1]
-    plt.axhline(y=10, c="0.8", alpha=0.8, ls="--", label="Normal")
-    plt.axhline(y=15, c="0.8", alpha=0.8, ls="--", label="Hyperglycemia")
+    plt.axhline(y=15, c=GLUCOSE_COLOURS[3], alpha=0.8, ls="--", label="Severe Hyperglycemia")
+    plt.axhline(y=10, c=GLUCOSE_COLOURS[2], alpha=0.8, ls="--", label="Mild Hyperglycemia")
+    plt.axhline(y=6, c=GLUCOSE_COLOURS[0], alpha=0.8, ls="--", label="Hypoglycemia")  # No such thing as glucose_colourmap.colours[1]
         
     # Do not index into Series like when indexing into lists/arrays! Need to use at or loc. Also, negative indexing is only allowed for integer methods.
     y_roll_mean.dropna(inplace=True)
