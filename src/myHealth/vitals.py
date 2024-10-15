@@ -479,6 +479,7 @@ def view_options(filtered_data: pd.DataFrame) -> None:
                     else:
                         visualisation.bp_scatter(filtered_data)
                         visualisation.glucose_scatter(filtered_data)
+                        visualisation.glucose_hist(filtered_data)
                         
                 case 3:  # Back to View Vitals
                     utility.clear_and_display("Returning to View Vitals...")
