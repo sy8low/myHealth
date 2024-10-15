@@ -14,6 +14,8 @@ Click **[here](src/myHealth/myHealth.py)** to view the source code for **🩺 my
 
 The package comes with two csv files, [myMedication.csv](src/myHealth/myMedication.csv) and [myVitals.csv](src/myHealth/myVitals.csv), which contain sample data that you can use to try out **🩺 myHealth**. If you'd like to start afresh, you can either delete the files or rename them.
 
+Check out my **[Notion Wiki](https://tinyurl.com/myHealthNotionWiki)** to see my implementation roadmap.
+
 ## 💊 myMedication
 
 Click **[here](src/myHealth/medication.py)** to view the source code of the `medicine` module, where **💊 myMedication** is implemented.
