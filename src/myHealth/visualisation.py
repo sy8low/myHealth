@@ -144,7 +144,7 @@ def glucose_scatter(data: pd.DataFrame):
     plt.colorbar(ticks=[0, 6, 10, 15, 30])
     plt.axhline(y=15, c=GLUCOSE_COLOURS[3], alpha=0.8, ls="--", label="Severe Hyperglycemia")
     plt.axhline(y=10, c=GLUCOSE_COLOURS[2], alpha=0.8, ls="--", label="Mild Hyperglycemia")
-    plt.axhline(y=6, c=GLUCOSE_COLOURS[0], alpha=0.8, ls="--", label="Hypoglycemia")  # No such thing as glucose_colourmap.colours[1]
+    plt.axhline(y=6, c=GLUCOSE_COLOURS[0], alpha=0.8, ls="--", label="Hypoglycemia")
         
     # Do not index into Series like when indexing into lists/arrays! Need to use at or loc. Also, negative indexing is only allowed for integer methods.
     y_roll_mean.dropna(inplace=True)
