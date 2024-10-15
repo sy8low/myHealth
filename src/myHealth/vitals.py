@@ -109,7 +109,7 @@ def vitals_menu() -> None:
                     
                     case 5:  # Undo All Changes
                         vitals = main_backup.copy()
-                        utility.clear_and_display("All changes have been undone. The original list of medications has been restored.")
+                        utility.clear_and_display("All changes have been undone. The original database has been restored.")
                     
                     case 6:  # Save and Go Back to myHealth- Done
                         utility.clear_and_display(save_vitals(vitals))
