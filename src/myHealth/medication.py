@@ -618,8 +618,7 @@ def query() -> tuple[str, str]:
                         break
                     else:
                         utility.display("Invalid input. Please try again.")
-                        for _ in range(5):
-                            utility.clear_line()
+                        utility.clear_5_lines()
                 break
                  
     return category, search
