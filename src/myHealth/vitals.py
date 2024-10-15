@@ -149,7 +149,7 @@ def load_vitals() -> tuple[pd.DataFrame, str]:
     # parse_dates=True is broken and has no effect.
     warnings.simplefilter(action='ignore', category=UserWarning)
     vitals = pd.read_csv(VITALS_FILENAME)
-    vitals["datetime"] = pd.to_datetime(vitals["datetime"], dayfirst=True)
+    vitals["datetime"] = pd.to_datetime(vitals["datetime"], yearfirst=True)
     vitals.sort_values("datetime", inplace=True, ignore_index=True)
     return vitals, "Records loaded successfully."
 
