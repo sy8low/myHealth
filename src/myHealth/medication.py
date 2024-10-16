@@ -734,28 +734,28 @@ def edit_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
             utility.display(f"{end - start:.5f} seconds.")
             
             if target:
-                print(f"This is the entry for {target.name}", target, sep="\n")
+                print(f"This is the entry for {target.name.title()}", target, sep="\n")
                 
-                if utility.yes_or_no(f"Do you want to change the name of {target.name}? "):
+                if utility.yes_or_no(f"Do you want to change the name of {target.name.title()}? "):
                     while True:
                         try:
-                            target.name = input(f"What's the new name of {target.name}? ")
+                            target.name = input(f"What's the new name of {target.name.title()}? ")
                             break
                         except ValueError:
                             utility.display("Please enter a valid alphanumeric name.")
 
-                if utility.yes_or_no(f"Do you want to change the purpose of {target.name}? "):
+                if utility.yes_or_no(f"Do you want to change the purpose of {target.name.title()}? "):
                     while True:
                         try:
-                            target.purpose = input(f"What's the new purpose of {target.name}? ")
+                            target.purpose = input(f"What's the new purpose of {target.name.title()}? ")
                             break
                         except ValueError:
                             utility.display("Please enter a valid alphanumeric entry.")
                             
-                if utility.yes_or_no(f"Do you want to change the dose size of {target.name}? "):
+                if utility.yes_or_no(f"Do you want to change the dose size of {target.name.title()}? "):
                     while True:
                         try:
-                            target.dose = input(f"What's the new dose size of {target.name} (Without units)? ")
+                            target.dose = input(f"What's the new dose size of {target.name.title()} (Without units)? ")
                             break
                         except ValueError:
                             utility.display("Please enter a valid dose size.")
@@ -770,7 +770,7 @@ def edit_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
                     else:
                         target.units = None
 
-                if utility.yes_or_no(f"Do you want to change the dosage times of {target.name}? "):
+                if utility.yes_or_no(f"Do you want to change the dosage times of {target.name.title()}? "):
                     while True:
                         updated_times = target.times.copy()
                         
