@@ -213,7 +213,7 @@ def view_menu_vitals(vitalsdb: pd.DataFrame) -> None:
                                 
                 case 3:  # Find a Record
                     target_date: pd.Timestamp = Input.get_datetime()
-                    target: int = search_vitals(vitalsdb, target_date)
+                    target: int = search_vitals(vitalsdb.copy(), target_date)
                     utility.clear_and_display(f"{target_date.date()} has been selected...")
                                        
                     selected_timeframe = select_timeframe(vitalsdb, target)
@@ -514,13 +514,14 @@ def search_vitals(vitalsdb: pd.DataFrame, target_date: pd.Timestamp, date_only: 
             c. If the middle index is dated to the target_date/datetime, a match is found, and the middle index is returned.
     
     Args:
-        vitalsdb: The full DataFrame being searched.
-        target_date: The date/datetime to be matched.
+        vitalsdb            : The DataFrame being searched. Must be a copy when first called. (Previously, this function  
+                              performs the copying. However, this is memory intensive as copying takes place after every recursion.)
+        target_date         : The date/datetime to be matched.
         date_only (optional): Indicates if only the date should be matched, or the full datetime.
                
     Raises:
-        KeyError: If the DataFrame cannot be sliced further (no matches can possibly be found).
-        RecursionError: If no matches are produced after 1000 calls (extremely unlikely for a match to be found).
+        KeyError      : If the DataFrame cannot be sliced further (no matches can possibly be found).
+        RecursionError: If no matches are produced after 1000 calls (extremely unlikely for a match to be found). Only occurs if there are >2^1000 records.
     
     Returns:
         The index of the first record found by the algorithm.
@@ -528,38 +529,45 @@ def search_vitals(vitalsdb: pd.DataFrame, target_date: pd.Timestamp, date_only: 
     
     # Not possible to find the median of Index objects directly. ndarrays are easier to work with than lists.
     # Better to work with arrays than (start, end) tuples as it is more straightforward.
-    vitalsdb_copy = vitalsdb.copy()
-    index_array: np.ndarray = vitalsdb_copy.index.to_numpy()
+    index_array: np.ndarray = vitalsdb.index.to_numpy()
     
-    if index_array.size == 0:  # If a record does not exist, eventually the database will be sliced until it becomes an empty array.
+    # If a record does not exist, eventually the database will be sliced until it becomes an empty array.
+    if index_array.size == 0:
         raise KeyError("Record not found.")
     
-    middle_index = int(np.median(index_array))  # In the case that there is an even number of indices, truncation returns the low median.
+    # In the case that there is an even number of indices, truncation returns the low median.
+    middle_index = int(np.median(index_array))
     
     # at favoured over loc for single cell searches.
-    # Forgetting to extract the date portion means that matches may never be found.
-    checked_date: pd.Timestamp = vitalsdb_copy.at[middle_index, "datetime"]
+    checked_date: pd.Timestamp = vitalsdb.at[middle_index, "datetime"]
+    # target_date needs to be passed into recursive calls. We shouldn't change it.
     target_date_compare: pd.Timestamp = target_date
     
+    # Forgetting to extract the date portion means that matches may never be found.
     if date_only:
-        checked_date: date = checked_date.date()  # Needs to be called. Returns a datetime.date object.
+        # Method, not an attribute. Returns a datetime.date object.
+        checked_date: date = checked_date.date()
         target_date_compare: date= target_date.date()
-        
-    if checked_date > target_date_compare:  # Overshot: Disregard every entry including and after the middle_index.
+    
+    # Overshot: Disregard every entry including and after the middle_index.
+    if checked_date > target_date_compare:
         # range returns a range object, not a list.
         # RangeIndex is ascending.
-        # Do not start from index 0, be careful to specify the "start" and "stop".
         # Being able to get min and max is the advantage of using ndarrays.
         discard = list(range(middle_index, index_array.max() + 1))
-        vitalsdb_copy.drop(discard, inplace=True)  # Doing it in place avoids the memory-intensive copying process.
-        return search_vitals(vitalsdb_copy, target_date, date_only)  # Recursion: make sure returned call has all the required arguments.
+        # Doing it in place avoids the memory-intensive copying process.
+        vitalsdb.drop(discard, inplace=True)
+        # Recursion: make sure returned call has all the required arguments.
+        return search_vitals(vitalsdb, target_date, date_only)
     
-    elif checked_date < target_date_compare:  # Not there yet: Disregard every entry including and before the middle_index.
+    # Not there yet: Disregard every entry including and before the middle_index.
+    elif checked_date < target_date_compare:
         discard = list(range(index_array.min(), middle_index + 1))
-        vitalsdb_copy.drop(discard, inplace=True)
-        return search_vitals(vitalsdb_copy, target_date, date_only)
+        vitalsdb.drop(discard, inplace=True)
+        return search_vitals(vitalsdb, target_date, date_only)
     
-    else:  # Found
+    # Found
+    else:
         return middle_index
     
     # Returning an array of all checked indices is a complicated nightmare: returning directly results in tuples within tuples;
@@ -570,8 +578,8 @@ def search_vitals(vitalsdb: pd.DataFrame, target_date: pd.Timestamp, date_only: 
     # elif checked_date < target_date: return search_vitals(vitalsdb[middle_index + 1:], target_date)   
 
 
+# Non-default arguments must come before defaults.
 def crawler(vitalsdb: pd.DataFrame, current_index: int, search_downwards: bool=True, mode: str="d") -> int:
-    # Non-default arguments must come before defaults.
     """Find all records before/after the record found with search_vitals from the same month/day (implemented recursively).
     
     Implementation:
@@ -581,7 +589,7 @@ def crawler(vitalsdb: pd.DataFrame, current_index: int, search_downwards: bool=T
             b. If it is not from the same month/day, the current index is returned.
     
         Thus, the index returned belongs to the farthest record before/after the target record from the same month/day.
-        Repeating with search_downwards set to False gives the range of indices from the same month/day.
+        Repeating with search_downwards set to the opposite gives the range of indices from the same month/day.
 
     Args:
         vitalsdb: The full DataFrame being searched.
@@ -598,8 +606,8 @@ def crawler(vitalsdb: pd.DataFrame, current_index: int, search_downwards: bool=T
     
     if search_downwards:
         next_index = current_index + 1
+        # The size of a DataFrame is the total number of elements, not the number of rows.
         if next_index == vitalsdb.index.size:
-            # The size of a DataFrame is the total number of elements, not the number of rows.
             return current_index
         
     else:
@@ -607,8 +615,8 @@ def crawler(vitalsdb: pd.DataFrame, current_index: int, search_downwards: bool=T
         if next_index == -1:
             return current_index
     
-    if mode in ["day", "d"]:
-        # Alt: mode == "day" or mode == "d"; be careful: if the second condition is just "d", it will be interpreted as True.
+    # Alt: mode == "day" or mode == "d"; be careful: if the second condition is just "d", it will be interpreted as True.
+    if mode in ["day", "d"]:    
         current_entry = vitalsdb.at[current_index, "datetime"].date()  # Already Timestamps.
         next_entry = vitalsdb.at[next_index, "datetime"].date()
         
@@ -640,7 +648,7 @@ def get_index_record(vitalsdb: pd.DataFrame, message: str) -> tuple[int, pd.Seri
     """
     
     target_date: pd.Timestamp = Input.get_datetime()
-    target: int= search_vitals(vitalsdb, target_date)
+    target: int= search_vitals(vitalsdb.copy(), target_date)
     
 
     start_index = crawler(vitalsdb, target, False)
@@ -694,7 +702,7 @@ def add_vitals(vitalsdb: pd.DataFrame) -> tuple[pd.DataFrame, str]:
     target_datetime: pd.Timestamp = Input.get_datetime(True, True)
     
     try:
-        search_vitals(vitalsdb, target_datetime, False)
+        search_vitals(vitalsdb.copy(), target_datetime, False)
     
     # An entry cannot be found.
     except (RecursionError, KeyError):
