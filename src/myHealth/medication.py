@@ -18,6 +18,7 @@ Functions:
     remove_medication   : Remove a Medicine object from the list.
 """
 
+import copy
 import csv
 from os.path import exists
 from tabulate import tabulate
@@ -294,6 +295,8 @@ class Medicine:
         """The name of the Medicine."""
         return self._name
     
+    # Unfortunately, I can't reject names composed of symbols only, as many medication names have symbols.
+    # A possible (more ambitious) solution is implementing a search bar for users to find medications online.
     @name.setter
     def name(self, name):
         name = name.strip().lower()
@@ -393,7 +396,8 @@ def med_menu() -> None:
         utility.display("Database does not exist. Returning to myHealth...")
     
     else:
-        main_backup = medlist.copy()
+        # Warning: Whenever individual entries are manipulated, you'd better make a deep copy.
+        main_backup = copy.deepcopy(medlist)
         
         while True:
             utility.clear_screen()
@@ -420,7 +424,7 @@ def med_menu() -> None:
                         utility.clear_and_display(message)
                     
                     case 5:  # Undo All Changes
-                        medlist = main_backup.copy()
+                        medlist = copy.deepcopy(main_backup)
                         utility.clear_and_display("All changes have been undone. The original list of medications has been restored.")
                     
                     case 6:  # Save and Go Back to Main Menu
@@ -676,8 +680,8 @@ def add_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
     # med_data is passed in as a reference to an object.
     # If amended, the underlying list itself will be amended in place without the need for a return value.
     
-    new_med_data = med_data.copy()
-    backup = med_data.copy()
+    new_med_data = copy.deepcopy(med_data)
+    backup = copy.deepcopy(med_data)
     
     try:
         new_med = Medicine.create()
@@ -718,8 +722,8 @@ def edit_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
         return med_data, utility.backtrack("myMedication")
     
     else:
-        new_med_data = med_data.copy()
-        backup = med_data.copy()
+        new_med_data = copy.deepcopy(med_data)
+        backup = copy.deepcopy(med_data)
         target = None
         
         try:
@@ -772,7 +776,7 @@ def edit_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
 
                 if utility.yes_or_no(f"Do you want to change the dosage times of {target.name.title()}? "):
                     while True:
-                        updated_times = target.times.copy()
+                        updated_times = copy.deepcopy(target.times)
                         
                         while True:
                             try:
@@ -845,7 +849,7 @@ def remove_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
         return med_data, utility.backtrack("myMedication")
     
     else:
-        new_med_data = med_data.copy()
+        new_med_data = copy.deepcopy(med_data)
         target = None
         target_index = None
         

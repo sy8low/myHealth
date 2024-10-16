@@ -81,7 +81,7 @@ def vitals_menu() -> None:
         utility.display("Database does not exist. Returning to My Health...")
     
     else:
-        main_backup = vitals.copy()
+        main_backup = vitals.copy(deep=True)
         
         while True:
             utility.clear_screen()
@@ -108,7 +108,7 @@ def vitals_menu() -> None:
                         utility.clear_and_display(message)
                     
                     case 5:  # Undo All Changes
-                        vitals = main_backup.copy()
+                        vitals = main_backup.copy(deep=True)
                         utility.clear_and_display("All changes have been undone. The original database has been restored.")
                     
                     case 6:  # Save and Go Back to myHealth- Done
@@ -213,6 +213,7 @@ def view_menu_vitals(vitalsdb: pd.DataFrame) -> None:
                                 
                 case 3:  # Find a Record
                     target_date: pd.Timestamp = Input.get_datetime()
+                    # A shallow copy will do as we're not manipulating entries.
                     target: int = search_vitals(vitalsdb.copy(), target_date)
                     utility.clear_and_display(f"{target_date.date()} has been selected...")
                                        
@@ -696,7 +697,7 @@ def add_vitals(vitalsdb: pd.DataFrame) -> tuple[pd.DataFrame, str]:
         The updated DataFrame and a success/failure message to the user.
     """
     
-    backup = vitalsdb.copy()
+    backup = vitalsdb.copy(deep=True)
     
     target_datetime: pd.Timestamp = Input.get_datetime(True, True)
     
@@ -764,8 +765,8 @@ def edit_vitals(vitalsdb: pd.DataFrame) -> tuple[pd.DataFrame, str]:
         return vitalsdb, "No records for editing."
     
     else:
-        backup = vitalsdb.copy()
-        working_copy = vitalsdb.copy()
+        backup = vitalsdb.copy(deep=True)
+        working_copy = vitalsdb.copy(deep=True)
         
         try:
             index_to_edit, record_to_edit = get_index_record(vitalsdb, "edit")
@@ -831,8 +832,8 @@ def remove_vitals(vitalsdb: pd.DataFrame) -> tuple[pd.DataFrame, str]:
         return vitalsdb, "No records for removing."
     
     else:
-        backup = vitalsdb.copy()
-        working_copy = vitalsdb.copy()
+        backup = vitalsdb.copy(deep=True)
+        working_copy = vitalsdb.copy(deep=True)
         
         try:
             index_to_remove, record_to_remove = get_index_record(vitalsdb, "remove")
