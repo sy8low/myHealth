@@ -469,13 +469,13 @@ def view_options(filtered_data: pd.DataFrame) -> None:
                     if "glucose" not in filtered_data.columns:  # Index object.
                         visualisation.bp_scatter(filtered_data)
                     
-                    # all(filtered_data.columns == pd.Index(["datetime", "sys", "dia", "pulse", "glucose"])
-                    # If all data are viewed, the conditional returns [True True True True True], which is evaluated by all as True.
-                    # However, if only a selection of data is viewed, the conditional cannot be evaluated. ValueError: Lengths must match to compare.
                     elif filtered_data.columns.size == 2 and "glucose" in filtered_data.columns:
                         visualisation.glucose_scatter(filtered_data)
                         visualisation.glucose_hist(filtered_data)
-                    
+
+                    # Alt: filtered_data.columns == pd.Index(["datetime", "sys", "dia", "pulse", "glucose"])
+                    # If all data are viewed, the conditional returns True.
+                    # However, if only a selection of data is viewed, the conditional cannot be evaluated. ValueError: Lengths must match to compare.                    
                     else:
                         visualisation.bp_scatter(filtered_data)
                         visualisation.glucose_scatter(filtered_data)
