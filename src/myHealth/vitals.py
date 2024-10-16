@@ -475,7 +475,8 @@ def view_options(filtered_data: pd.DataFrame) -> None:
 
                     # Alt: filtered_data.columns == pd.Index(["datetime", "sys", "dia", "pulse", "glucose"])
                     # If all data are viewed, the conditional returns True.
-                    # However, if only a selection of data is viewed, the conditional cannot be evaluated. ValueError: Lengths must match to compare.                    
+                    # However, if only a selection of data is viewed, the conditional cannot be evaluated. ValueError: Lengths must match to compare.
+                    # Furthermore, what if the columns are somehow out of order?
                     else:
                         visualisation.bp_scatter(filtered_data)
                         visualisation.glucose_scatter(filtered_data)
