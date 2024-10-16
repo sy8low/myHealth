@@ -883,7 +883,7 @@ class Input:
                         year = int(year.group())
                         break
                     else:
-                        raise ValueError("Invalid month.")
+                        raise ValueError("Invalid year.")
                         
                 except ValueError:
                     utility.display("Please enter a valid year.")
