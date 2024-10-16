@@ -11,8 +11,6 @@ Functions:
     glucose_hist        : Create a histogram of the patient's blood glucose levels.
 """ 
 
-# 1. Must activate virtual environment: . .venv/bin/activate
-# 2. Ensure tkinter is installed, though it should already be (so that external window shows up): sudo apt-get install python3-tk
 from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
 import numpy as np
