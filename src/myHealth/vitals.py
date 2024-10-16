@@ -648,9 +648,8 @@ def get_index_record(vitalsdb: pd.DataFrame, message: str) -> tuple[int, pd.Seri
     """
     
     target_date: pd.Timestamp = Input.get_datetime()
-    target: int= search_vitals(vitalsdb.copy(), target_date)
+    target: int = search_vitals(vitalsdb.copy(), target_date)
     
-
     start_index = crawler(vitalsdb, target, False)
     end_index =  crawler(vitalsdb, target)
         
@@ -717,28 +716,28 @@ def add_vitals(vitalsdb: pd.DataFrame) -> tuple[pd.DataFrame, str]:
         try:
             print(f"Please enter the details for {target_datetime}:")
             
-            # Be careful with array shapes when creating DataFrames. Use dicts of arrays to create single-row DataFrames.
+            # Be careful with array shapes when creating DataFrames. If using all scalar values, you must pass an index.
+            # Alt: Use dicts of singleton arrays to create single-row DataFrames.
             record = {
                 "datetime": target_datetime,
-                "sys": [Input.get_bp("sys")],
-                "dia": [Input.get_bp("dia")],
-                "pulse": [Input.get_pulse()],
-                "glucose": [Input.get_glucose()],
+                "sys": Input.get_bp("sys"),
+                "dia": Input.get_bp("dia"),
+                "pulse": Input.get_pulse(),
+                "glucose": Input.get_glucose(),
             }
             
             # pd.NA has no boolean value; any operations on it will return itself.
-            # Empty strings are interpreted as "objects" by the DF constructor. Use PD.NA to avoid dtype conflicts with the other values.
+            # Empty strings are interpreted as "objects" by the DF constructor. Use pd.NA to avoid data type conflicts with the other values.
             # Note that all numerical datatypes are float64.
-            if not any([record[detail][0] for detail in record if detail != "datetime"]):  # Don't mix up keys and values.
+            if not any([record[detail] for detail in record if detail != "datetime"]):  # Don't mix up keys and values.
                 raise ValueError("All empty.")
             
             for detail in record:
-                if detail != "datetime" and not record[detail][0]:
-                    record[detail][0] = pd.NA
+                if not record[detail]:
+                    record[detail] = pd.NA
             
-            # TODO: Look into the differences between merge and concat.
-            # If using all scalar values, you must pass an index
-            new_row = pd.DataFrame(record)
+            new_row = pd.DataFrame(record, index=[0])
+            # Merge is used for SQL-style joining.
             new_vitalsdb = pd.concat([vitalsdb, new_row], ignore_index=True)
             new_vitalsdb.sort_values("datetime", inplace=True, ignore_index=True)
 
@@ -776,7 +775,6 @@ def edit_vitals(vitalsdb: pd.DataFrame) -> tuple[pd.DataFrame, str]:
                     if utility.yes_or_no(f"Do you want to change the date? "):
                         existing_time: time = record_to_edit.at["datetime"].time()
                         new_date: date = Input.get_datetime().date()
-                        # Arguments to combine are date and time objects respectively
                         working_copy.at[index_to_edit, "datetime"] = pd.Timestamp.combine(new_date, existing_time)
                     
                     if utility.yes_or_no(f"Do you want to change the time? "):
@@ -980,7 +978,7 @@ class Input:
             try:
                 if bp:
                     bp = int(bp)
-                    if not (0 < bp < 300):
+                    if not (20 < bp < 300):
                         raise ValueError("Invalid blood pressure.")
                     
             except ValueError:
@@ -1003,7 +1001,7 @@ class Input:
             try:
                 if pulse:
                     pulse = int(pulse)
-                    if not (0 < pulse < 200):
+                    if not (10 < pulse < 200):
                         raise ValueError("Invalid pulse rate.")
                     
             except ValueError:
