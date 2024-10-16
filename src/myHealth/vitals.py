@@ -252,7 +252,7 @@ def view_menu_vitals(vitalsdb: pd.DataFrame) -> None:
             utility.display("\nPress '4' to return to myVitals.")
 
 
-def select_timeframe(vitalsdb: pd.DataFrame, target: pd.Timestamp) -> pd.DataFrame:
+def select_timeframe(vitalsdb: pd.DataFrame, target: int) -> pd.DataFrame:
     """Filter the DataFrame to include only records within a certain time period from the target date.
 
     Note:
@@ -260,7 +260,7 @@ def select_timeframe(vitalsdb: pd.DataFrame, target: pd.Timestamp) -> pd.DataFra
     
     Args:
         vitalsdb: The full Pandas DataFrame.
-        target: The date provided by the user.
+        target: The index of the record found.
 
     Raises:
         NoSelectionError: If the user chooses to return to View Vitals (the previous menu).
