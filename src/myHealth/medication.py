@@ -454,6 +454,8 @@ def load_medication() -> tuple[list[Medicine], str]:
         A list of Medicine objects and a success/failure message to the user.
     """
     
+    start = perf_counter()
+    
     if not exists(MED_FILENAME):
         with open(MED_FILENAME, "w") as file:
             writer = csv.DictWriter(file, Medicine.MED_HEADERS)
@@ -461,15 +463,13 @@ def load_medication() -> tuple[list[Medicine], str]:
     
     med_data = []
     with open(MED_FILENAME, newline="") as meddb:
-        start = perf_counter()
         reader = csv.DictReader(meddb)
         
         for med in reader:                
             med_data.append(Medicine(med["name"], med["purpose"], float(med["dose"]), med["units"], eval(med["times"])))
     
     end = perf_counter()
-    utility.clear_and_display(f"{end - start:.5f} seconds.")
-    return med_data, "Medications loaded successfully."
+    return med_data, f"Medications loaded successfully. {end - start:.5f} seconds."
 
 
 def save_medication(med_data: list[Medicine]) -> str:
@@ -496,9 +496,8 @@ def save_medication(med_data: list[Medicine]) -> str:
                 "times": med._times,
             })
     
-    end = perf_counter()   
-    utility.clear_and_display(f"{end - start:.5f} seconds.")     
-    return f"Medications saved successfully, returning to Main Menu."
+    end = perf_counter()
+    return f"Medications saved successfully, returning to Main Menu. {end - start:.5f} seconds."
 
 
 # TODO: Display as table.
@@ -694,8 +693,7 @@ def add_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
         new_med_data.append(new_med)
         
         end = perf_counter()
-        utility.clear_and_display(f"{end - start:.5f} seconds.")
-        return new_med_data, f"{new_med.name.title()} successfully added. Returning to myMedication..."
+        return new_med_data, f"{new_med.name.title()} successfully added. Returning to myMedication... {end - start:.5f} seconds."
     
     except KeyboardInterrupt:
         return backup, "\nAction disrupted. No changes will be made. Returning to myMedication..."

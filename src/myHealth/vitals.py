@@ -24,7 +24,7 @@ Functions:
         crawler             : Find all records before/after the record found with search_vitals from the same month/day
                               (implemented recursively).
         get_index_record    : Get a date from the user, then get the user to pick a record from the all the records from the
-                              same month/day found.
+                              same day found.
     
     Manipulating vitals records:
         add_vitals          : Add a record to the DataFrame.
@@ -45,6 +45,7 @@ from os.path import exists
 import pandas as pd
 import re
 from tabulate import tabulate
+from time import perf_counter
 import utility
 import visualisation
 import warnings
@@ -143,6 +144,8 @@ def load_vitals() -> tuple[pd.DataFrame, str]:
         The records as a Pandas DataFrame and a success/failure message to the user.
     """
     
+    start = perf_counter()
+    
     if not exists(VITALS_FILENAME):
         with open(VITALS_FILENAME, "w") as file:
             writer = csv.DictWriter(file, VITALS_HEADERS)
@@ -153,7 +156,9 @@ def load_vitals() -> tuple[pd.DataFrame, str]:
     vitals = pd.read_csv(VITALS_FILENAME)
     vitals["datetime"] = pd.to_datetime(vitals["datetime"], yearfirst=True)
     vitals.sort_values("datetime", inplace=True, ignore_index=True)
-    return vitals, "Records loaded successfully."
+    
+    end = perf_counter()
+    return vitals, f"Records loaded successfully. {end - start:.5f} seconds."
 
 
 def save_vitals(vitalsdb: pd.DataFrame) -> str:
@@ -167,9 +172,12 @@ def save_vitals(vitalsdb: pd.DataFrame) -> str:
     """
     
     # Make sure the file is not open in Excel, otherwise a PermissionError will be raised.
+    start = perf_counter()
     vitalsdb.to_csv(VITALS_FILENAME, index=False)
     del vitalsdb
-    return "Records saved successfully, returning to Main Menu."
+    
+    end = perf_counter()
+    return f"Records saved successfully, returning to Main Menu. {end - start:.5f} seconds."
 
 
 def view_menu_vitals(vitalsdb: pd.DataFrame) -> None:
@@ -216,8 +224,10 @@ def view_menu_vitals(vitalsdb: pd.DataFrame) -> None:
                 case 3:  # Find a Record
                     target_date: pd.Timestamp = Input.get_datetime()
                     # A shallow copy will do as we're not manipulating entries.
+                    start = perf_counter()
                     target: int = search_vitals_2(vitalsdb, target_date)
-                    utility.clear_and_display(f"{target_date.date()} has been selected...")
+                    end = perf_counter()
+                    utility.clear_and_display(f"{target_date.date()} has been selected... {end - start:.5f} seconds.")
                                        
                     selected_timeframe = select_timeframe(vitalsdb, target)
                         
@@ -248,8 +258,7 @@ def view_menu_vitals(vitalsdb: pd.DataFrame) -> None:
         except (KeyError, RecursionError):
             utility.display("Record not found. Returning to View Vitals...")
         
-        except ValueError as error:
-            utility.display(error)
+        except ValueError:
             utility.display("Please select a valid option.")
         
         except KeyboardInterrupt:
@@ -294,6 +303,7 @@ def select_timeframe(vitalsdb: pd.DataFrame, target: int) -> pd.DataFrame:
                     selected_indices = [target]
                 
                 case 2:  # View all records from the same day
+                    start = perf_counter()
                     start_index = crawler(vitalsdb, target, False)
                     end_index =  crawler(vitalsdb, target)
                     
@@ -301,8 +311,12 @@ def select_timeframe(vitalsdb: pd.DataFrame, target: int) -> pd.DataFrame:
                         selected_indices = [target]
                     else:
                         selected_indices = list(range(start_index, end_index + 1))
+                    
+                    end = perf_counter()
+                    utility.clear_and_display(f"{end - start:.5f} seconds.")
                 
                 case 3:  # View all records from the same month
+                    start = perf_counter()
                     start_index = crawler(vitalsdb, target, False, "m")
                     end_index =  crawler(vitalsdb, target, True, "m")
 
@@ -310,6 +324,9 @@ def select_timeframe(vitalsdb: pd.DataFrame, target: int) -> pd.DataFrame:
                         selected_indices = [target]
                     else:
                         selected_indices = list(range(start_index, end_index + 1))
+                    
+                    end = perf_counter()
+                    utility.clear_and_display(f"{end - start:.5f} seconds.")
 
                 case 4:  # View records before it
                     while True:
@@ -711,7 +728,7 @@ def crawler(vitalsdb: pd.DataFrame, current_index: int, search_downwards: bool=T
 
 
 def get_index_record(vitalsdb: pd.DataFrame, message: str) -> tuple[int, pd.Series]:
-    """Get a date from the user, then get the user to pick a record from the all the records from the same month/day found.
+    """Get a date from the user, then get the user to pick a record from the all the records from the same day found.
     
     Args:
         vitalsdb: The full DataFrame to be searched.
@@ -722,8 +739,11 @@ def get_index_record(vitalsdb: pd.DataFrame, message: str) -> tuple[int, pd.Seri
     """
     
     target_date: pd.Timestamp = Input.get_datetime()
+    start_1 = perf_counter()
     target: int = search_vitals_2(vitalsdb, target_date)
+    end_1 = perf_counter()
     
+    start_2 = perf_counter()
     start_index = crawler(vitalsdb, target, False)
     end_index =  crawler(vitalsdb, target)
         
@@ -732,11 +752,12 @@ def get_index_record(vitalsdb: pd.DataFrame, message: str) -> tuple[int, pd.Seri
         
     else:
         selected_indices = list(range(start_index, end_index + 1))
+    end_2 = perf_counter()
     
     # No need to transpose, even if length is 1. Providing indices as a list solves the problem.
     selected_data = pd.DataFrame(vitalsdb.loc[selected_indices])
     utility.clear_screen()
-    print(f"These are the entries for {target_date.date()}:\n", selected_data.to_string(), sep="\n")
+    print(f"These are the entries for {target_date.date()}:\n", selected_data.to_string(), f"{end_1 - start_1:.5f} seconds to search.", f"{end_2 - start_2:.5f} seconds to crawl.", sep="\n")
     
     while True:
         try:
