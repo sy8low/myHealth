@@ -328,7 +328,7 @@ class Medicine:
     @dose.setter
     def dose(self, dose):
         dose = float(dose)
-        if dose > 0:
+        if 0 < dose < 1000:
             self._dose = dose
         elif dose == 0:
             self._dose = 0
