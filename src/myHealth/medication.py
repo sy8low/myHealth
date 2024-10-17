@@ -487,6 +487,7 @@ def save_medication(med_data: list[Medicine]) -> str:
         writer.writeheader()
         
         start = perf_counter()
+        # Serializer.
         for med in med_data:
             writer.writerow({
                 "name": med._name,
@@ -805,7 +806,7 @@ def edit_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
                                         
                                     else:
                                         updated_times[time_to_change] = input(f"How many doses should be taken {Medicine.TIMES[time_to_change]}? ")
-                                        if updated_times[time_to_change] != 0 and updated_times["AAWN"] != 0:
+                                        if updated_times[time_to_change] > 0 and updated_times["AAWN"] > 0:
                                             updated_times["AAWN"] = 0
                                             utility.display("AAWN will be set to 0.")
                                     

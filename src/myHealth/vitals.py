@@ -320,10 +320,7 @@ def select_timeframe(vitalsdb: pd.DataFrame, target: int) -> pd.DataFrame:
                     start_index = crawler(vitalsdb, target, False, "m")
                     end_index =  crawler(vitalsdb, target, True, "m")
 
-                    if start_index == end_index:
-                        selected_indices = [target]
-                    else:
-                        selected_indices = list(range(start_index, end_index + 1))
+                    selected_indices = list(range(start_index, end_index + 1))
                     
                     end = perf_counter()
                     utility.clear_and_display(f"{end - start:.5f} seconds.")
@@ -340,12 +337,9 @@ def select_timeframe(vitalsdb: pd.DataFrame, target: int) -> pd.DataFrame:
                     
                     if number > (target + 1):
                         number = target + 1
-                        utility.display(f"There are only {target + 1} record(s) before this. Only {target + 1} record(s) will be shown.")
+                        utility.display(f"There are only {number} record(s) before this. Only {number} record(s) will be shown.")
                     
-                    if number == 1:
-                        selected_indices = [target]
-                    else:
-                        selected_indices = list(range(target - number + 1, target + 1))
+                    selected_indices = list(range(target - number + 1, target + 1))
 
                 case 5:  # Back to View Vitals
                     raise NoSelectionError("View Vitals")
