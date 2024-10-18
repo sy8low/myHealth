@@ -818,12 +818,8 @@ def add_vitals(vitalsdb: pd.DataFrame) -> tuple[pd.DataFrame, str]:
             # pd.NA has no boolean value; any operations on it will return itself.
             # Empty strings are interpreted as "objects" by the DF constructor. Use pd.NA to avoid data type conflicts with the other values.
             # Note that all numerical datatypes are float64.
-            if not any([record[detail] for detail in record if detail != "datetime"]):  # Don't mix up keys and values.
+            if all([isinstance(record[detail], pd.NA) for detail in record if detail != "datetime"]):  # Don't mix up keys and values.
                 raise ValueError("All empty.")
-            
-            for detail in record:
-                if not record[detail]:
-                    record[detail] = pd.NA
             
             new_row = pd.DataFrame(record, index=[0])
             # Merge is used for SQL-style joining.
@@ -883,8 +879,8 @@ def edit_vitals(vitalsdb: pd.DataFrame) -> tuple[pd.DataFrame, str]:
                     if utility.yes_or_no(f"Do you want to change the blood glucose level? "):
                         working_copy.at[index_to_edit, "glucose"] = Input.get_glucose()
                 
-                    if not any ([
-                        detail for detail in working_copy.loc[
+                    if all ([
+                        isinstance(detail, pd.NA) for detail in working_copy.loc[
                             index_to_edit, ["sys", "dia", "pulse", "glucose"]
                         ]
                     ]):
@@ -1069,6 +1065,8 @@ class Input:
                     bp = int(bp)
                     if not (20 < bp < 300):
                         raise ValueError("Invalid blood pressure.")
+                else:
+                    bp = pd.NA
                     
             except ValueError:
                 utility.display("Please enter a valid blood pressure.")
@@ -1092,6 +1090,8 @@ class Input:
                     pulse = int(pulse)
                     if not (10 < pulse < 200):
                         raise ValueError("Invalid pulse rate.")
+                else:
+                    pulse = pd.NA
                     
             except ValueError:
                 utility.display("Please enter a valid pulse rate.")
@@ -1115,6 +1115,8 @@ class Input:
                     glucose = round(float(glucose), 1)
                     if not (0 < glucose < 30):
                         raise ValueError("Invalid glucose level.")
+                else:
+                    glucose = pd.NA
                     
             except ValueError:
                 utility.display("Please enter a valid glucose level.")
