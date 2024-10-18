@@ -225,7 +225,7 @@ def view_menu_vitals(vitalsdb: pd.DataFrame) -> None:
                     target_date: pd.Timestamp = Input.get_datetime()
                     # A shallow copy will do as we're not manipulating entries.
                     start = perf_counter()
-                    target: int = search_vitals_2(vitalsdb, target_date)
+                    target: int = search_vitals_3(vitalsdb, target_date)
                     end = perf_counter()
                     utility.clear_and_display(f"{target_date.date()} has been selected... {end - start:.5f} seconds.")
                                        
@@ -589,6 +589,7 @@ def search_vitals(vitalsdb: pd.DataFrame, target_date: pd.Timestamp, date_only: 
     # Think carefully about the arguments that the function should take, and be clear about the data types involved.
 
 
+# Having separate parameters for start and end indices is better than a single (start, end) list. More straightforward.
 def search_vitals_2(vitalsdb: pd.DataFrame, target_date: pd.Timestamp, date_only: bool=True, start_index: int=None, end_index: int=None, index_array: np.ndarray=None) -> int:
     """Find a record in the DataFrame with the desired date using a binary search algorithm, implemented recursively. DataFrame is not sliced.
     
@@ -656,11 +657,62 @@ def search_vitals_2(vitalsdb: pd.DataFrame, target_date: pd.Timestamp, date_only
     else:
         return middle_index
 
-    # A previous solution that didn't work:
-    # if checked_date > target_date: return search_vitals(vitalsdb[:middle_index], target_date)
-    # elif checked_date < target_date: return search_vitals(vitalsdb[middle_index + 1:], target_date)
-    # vitalsdb could only be sliced once per side; further slices returned an empty array.
-    # Having separate parameters for start and end indices is better than a single (start, end) list. More straightforward.
+
+# FIXME: Seem to keep running into empty slices.
+# https://pandas.pydata.org/docs/user_guide/indexing.html
+# https://www.dataquest.io/blog/settingwithcopywarning/
+def search_vitals_3(vitalsdb: pd.DataFrame, target_date: pd.Timestamp, date_only: bool=True) -> int:
+    """Find a record in the DataFrame with the desired date using a binary search algorithm, implemented recursively. DataFrame is sliced.
+    
+    Implementation:
+        1. If there are no more records left in the DataFrame, raise an exception.
+        2. The date/datetime of the middle index is compared to the target_date/datetime.
+            a. If the middle index is dated later, everything that comes after it is discarded,
+               and the algorithm is repeated with the truncated DataFrame.
+            b. If the middle index is dated earlier, everything that comes before it is discarded,
+               and the algorithm is repeated with the truncated DataFrame.
+            c. If the middle index is dated to the target_date/datetime, a match is found, and the middle index is returned.
+    
+    Args:
+        vitalsdb            : The DataFrame being searched. Must be a copy when first called. (Previously, this function  
+                              performs the copying. However, this is memory intensive as copying takes place after every recursion.)
+        target_date         : The date/datetime to be matched.
+        date_only (optional): Indicates if only the date should be matched, or the full datetime. Defaults to True.
+               
+    Raises:
+        KeyError      : If the DataFrame cannot be sliced further (no matches can possibly be found).
+        RecursionError: If no matches are produced after 1000 calls (extremely unlikely for a match to be found). Only occurs if there are >2^1000 records.
+    
+    Returns:
+        The index of the first record found by the algorithm.
+    """
+    
+    index_array: np.ndarray = vitalsdb.index.to_numpy()
+    
+    if index_array.size == 0:
+        raise KeyError("Record not found.")
+    
+    middle_index = int(np.median(index_array))
+    
+    checked_date: pd.Timestamp = vitalsdb.at[middle_index, "datetime"]
+    target_date_compare: pd.Timestamp = target_date
+    
+    if date_only:
+        checked_date: date = checked_date.date()
+        target_date_compare: date= target_date.date()
+    
+    # Overshot: Disregard every entry including and after the middle_index.
+    if checked_date > target_date_compare:
+        # No need to use iloc.
+        return search_vitals_3(vitalsdb[:middle_index], target_date, date_only)
+    
+    # Not there yet: Disregard every entry including and before the middle_index.
+    elif checked_date < target_date_compare:
+        return search_vitals_3(vitalsdb[middle_index + 1:], target_date, date_only)
+    
+    # Found
+    else:
+        return middle_index
 
 
 # Non-default arguments must come before defaults.
