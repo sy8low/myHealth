@@ -43,14 +43,14 @@ def clear_lines(lines: int=1) -> None:
     
     @repeat(lines)
     def clear_multiple_lines() -> None:
-        print("\033[2K", "\033[1F", "\033[0K", sep="", end="")
+        print("\033[2K", "\033[1F", "\033[2K", sep="", end="")
     
     clear_multiple_lines()
 
 
 def clear_screen() -> None:
     """Clear the entire terminal window."""
-    print("\033c", "\033[H", sep="", end="")
+    print("\033[2J", "\033[H", sep="", end="")
     
 
 def clear_screen_deco(func):
@@ -81,7 +81,7 @@ def display(text, pause: int=3) -> None:
         
     print(text)
     sleep(pause)
-    print("\033[2F", "\033[0J", sep="", end="")
+    print("\033[1F", "\033[2K", sep="", end="")
 
 
 @clear_screen_deco
@@ -96,7 +96,7 @@ def clear_and_display(text, pause: int=3) -> None:
     
     print(text)
     sleep(pause)
-    print("\033[2F", "\033[0J", sep="", end="")
+    print("\033[1F", "\033[2K", sep="", end="")
 
     
 def yes_or_no(prompt: str) -> bool:
