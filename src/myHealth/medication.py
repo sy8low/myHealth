@@ -798,27 +798,29 @@ def edit_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
                         
                         if time_to_change in Medicine.TIMES:
                             while True:
-                                try:                                
-                                    if time_to_change == "AAWN":
-                                        updated_times["AAWN"] = input("How many doses should be taken as and when necessary? ")
-                                        # The setter is only activated when the whole property is changed.
-                                        target.times = updated_times
-                                        
+                                try:
+                                    updated_times[time_to_change] = input(f"How many doses should be taken {Medicine.TIMES[time_to_change]}? ")
+                                    # The setter is only activated when the entire property is changed.
+                                    # Both the strings and ints will be cast as ints.
+                                    # Input should be validated before the subsequent conditional is run.
+                                    target.times = updated_times
+                                    
+                                    if time_to_change == "AAWN":                                        
                                         utility.display("All other dosage times will be set to 0.")
-                                        for other_times in Medicine.TIMES:
-                                            if not "AAWN": updated_times[other_times] = 0
+                                        for times in Medicine.TIMES:
+                                            if not "AAWN":
+                                                updated_times[times] = 0
+                                        target.times = updated_times
                                         utility.clear_lines(7)
                                         
-                                    else:
-                                        updated_times[time_to_change] = input(f"How many doses should be taken {Medicine.TIMES[time_to_change]}? ")
+                                    elif target.times[time_to_change] > 0 and target.times["AAWN"] > 0:
+                                        utility.display("AAWN will be set to 0.")
+                                        updated_times["AAWN"] = 0
                                         target.times = updated_times
-                                        
-                                        if updated_times[time_to_change] > 0 and updated_times["AAWN"] > 0:
-                                            utility.display("AAWN will be set to 0.")
-                                            updated_times["AAWN"] = 0
-                                            utility.clear_lines(7)
-                                        else:
-                                            utility.clear_lines(8)
+                                        utility.clear_lines(7)
+                                            
+                                    else:
+                                        utility.clear_lines(8)
                                             
                                 except ValueError:
                                     utility.display("Please enter a valid positive whole number number of doses.")
