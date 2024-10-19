@@ -18,9 +18,11 @@ Functions:
     
     Searching vitals records:
         search_vitals       : Find the first record in the DataFrame with the desired date using a binary search algorithm,
-                              implemented recursively. DataFrame is sliced.
+                              implemented recursively (entries are repeatedly dropped).
         search_vitals_2     : Find the first record in the DataFrame with the desired date using a binary search algorithm,
-                              implemented recursively. DataFrame is not sliced.
+                              implemented recursively (range of entries check shrinks progressively).
+        search_vitals_3     : Find the first record in the DataFrame with the desired date using a binary search algorithm,
+                              implemented recursively (DataFrame is sliced).
         crawler             : Find all records before/after the record found with search_vitals from the same month/day
                               (implemented recursively).
         get_index_record    : Get a date from the user, then get the user to pick a record from the all the records from the
@@ -517,7 +519,7 @@ def search_vitals(vitalsdb: pd.DataFrame, target_date: pd.Timestamp, date_only: 
     # Remember to only pass in copies of the original database.
     # Be careful when passing objects as arguments into functions: it is actually the reference that is passed in.
     # Methods applied to them in place will be applied to the underlying object outside of the scope.
-    """Find a record in the DataFrame with the desired date using a binary search algorithm, implemented recursively. DataFrame is sliced.
+    """Find a record in the DataFrame with the desired date using a binary search algorithm, implemented recursively (entries are repeatedly dropped).
     
     Implementation:
         1. If there are no more records left in the DataFrame, raise an exception.
@@ -535,7 +537,7 @@ def search_vitals(vitalsdb: pd.DataFrame, target_date: pd.Timestamp, date_only: 
         date_only (optional): Indicates if only the date should be matched, or the full datetime. Defaults to True.
                
     Raises:
-        KeyError      : If the DataFrame cannot be sliced further (no matches can possibly be found).
+        KeyError      : If the DataFrame has no more entries left, but no matches have been found.
         RecursionError: If no matches are produced after 1000 calls (extremely unlikely for a match to be found). Only occurs if there are >2^1000 records.
     
     Returns:
@@ -591,27 +593,27 @@ def search_vitals(vitalsdb: pd.DataFrame, target_date: pd.Timestamp, date_only: 
 
 # Having separate parameters for start and end indices is better than a single (start, end) list. More straightforward.
 def search_vitals_2(vitalsdb: pd.DataFrame, target_date: pd.Timestamp, date_only: bool=True, start_index: int=None, end_index: int=None, index_array: np.ndarray=None) -> int:
-    """Find a record in the DataFrame with the desired date using a binary search algorithm, implemented recursively. DataFrame is not sliced.
+    """Find a record in the DataFrame with the desired date using a binary search algorithm, implemented recursively (range of entries check shrinks progressively).
     
     Implementation:
         1. If there are no more records left in the DataFrame, raise an exception.
         2. The date/datetime of the middle index is compared to the target_date/datetime.
             a. If the middle index is dated later, everything that comes after it is disregarded,
-               and the algorithm is repeated with the truncated DataFrame.
+               and the algorithm is repeated with the smaller range.
             b. If the middle index is dated earlier, everything that comes before it is disregarded,
-               and the algorithm is repeated with the truncated DataFrame.
+               and the algorithm is repeated with the smaller range.
             c. If the middle index is dated to the target_date/datetime, a match is found, and the middle index is returned.
     
     Args:
-        vitalsdb            : The DataFrame being searched. This doesn't need to be a copy, as the DataFrame is not sliced.
+        vitalsdb            : The DataFrame being searched. This doesn't need to be a copy, as the DataFrame is not manipulated.
         target_date         : The date/datetime to be matched.
-        date_only (optional): Indicates if only the date should be matched, or the full datetime. Defaults to True
+        date_only (optional): Indicates if only the date should be matched, or the full datetime. Defaults to True.
         start_index         : The first index to be checked. Defaults to None.
         end_index           : The last index to be checked. Defaults to None.
         index_array         : The index of the DataFrame. Defaults to None.
                
     Raises:
-        KeyError      : If there are no matches but no more records to be checked.
+        KeyError      : If there are no more records to be checked, but no matches have been found.
         RecursionError: If no matches are produced after 1000 calls (extremely unlikely for a match to be found). Only occurs if there are >2^1000 records.
     
     Returns:
@@ -662,26 +664,25 @@ def search_vitals_2(vitalsdb: pd.DataFrame, target_date: pd.Timestamp, date_only
 # https://pandas.pydata.org/docs/user_guide/indexing.html
 # https://www.dataquest.io/blog/settingwithcopywarning/
 def search_vitals_3(vitalsdb: pd.DataFrame, target_date: pd.Timestamp, date_only: bool=True) -> int:
-    """Find a record in the DataFrame with the desired date using a binary search algorithm, implemented recursively. DataFrame is sliced.
+    """Find a record in the DataFrame with the desired date using a binary search algorithm, implemented recursively (DataFrame is sliced).
     
     Implementation:
         1. If there are no more records left in the DataFrame, raise an exception.
         2. The date/datetime of the middle index is compared to the target_date/datetime.
-            a. If the middle index is dated later, everything that comes after it is discarded,
-               and the algorithm is repeated with the truncated DataFrame.
-            b. If the middle index is dated earlier, everything that comes before it is discarded,
-               and the algorithm is repeated with the truncated DataFrame.
+            a. If the middle index is dated later, everything that comes after it is disregarded,
+               and the algorithm is repeated with the sliced DataFrame.
+            b. If the middle index is dated earlier, everything that comes before it is disregarded,
+               and the algorithm is repeated with the sliced DataFrame.
             c. If the middle index is dated to the target_date/datetime, a match is found, and the middle index is returned.
     
     Args:
-        vitalsdb            : The DataFrame being searched. Must be a copy when first called. (Previously, this function  
-                              performs the copying. However, this is memory intensive as copying takes place after every recursion.)
+        vitalsdb            : The DataFrame being searched. This doesn't need to be a copy, as the DataFrame is not manipulated.
         target_date         : The date/datetime to be matched.
         date_only (optional): Indicates if only the date should be matched, or the full datetime. Defaults to True.
                
     Raises:
-        KeyError      : If the DataFrame cannot be sliced further (no matches can possibly be found).
-        RecursionError: If no matches are produced after 1000 calls (extremely unlikely for a match to be found). Only occurs if there are >2^1000 records.
+        KeyError      : If the DataFrame cannot be sliced further, but no matches have been found.
+        RecursionError: If no matches are found after 1000 calls (extremely unlikely for a match to be found). Only occurs if there are >2^1000 records.
     
     Returns:
         The index of the first record found by the algorithm.
