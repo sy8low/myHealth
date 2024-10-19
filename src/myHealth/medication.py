@@ -206,7 +206,7 @@ class Medicine:
 
     @staticmethod
     def get_pfloat(prompt: str) -> float:
-        """Get a positive real number from the user.
+        """Get a positive real number up between 0 and 999 inclusive from the user.
 
         Args:
             prompt: Instructions to the user.
@@ -222,7 +222,7 @@ class Medicine:
                     return 0
                 else:
                     dose = float(dose)
-                    if dose >= 0:
+                    if 0 <= dose < 1000:
                         return dose
                     else:
                         raise ValueError("Invalid positive real number.")
