@@ -1,11 +1,10 @@
 """utility implements helper functions and exceptions used in the user interface.
 
 Functions:
-    clear_screen
-    clear_line
-    clear_screen_deco   : Decorate a function such that the screen is cleared before its execution.
     repeat              : Decorate a function such that it is executed multiple times.
-    clear_5_lines
+    clear_screen
+    clear_lines
+    clear_screen_deco   : Decorate a function such that the screen is cleared before its execution.
     display             : Print a line of text on the terminal window and clear it after the stipulated period.
     clear_and_display   : Clear the screen before printing a line of text for a stipulated period.
     yes_or_no           : Implement a simple command-line "yes-or-no" selector.
@@ -17,31 +16,6 @@ Exceptions:
 
 from functools import wraps
 from time import sleep
-
-def clear_screen() -> None:
-    print("\033c", "\033[H", sep="", end="")
-
-
-def clear_line() -> None:
-    print("\033[2K", "\033[1F", "\033[0K", sep="", end="")
-
-
-def clear_screen_deco(func):
-    """Decorate a function such that the screen is cleared before its execution.
-
-    Args:
-        func (function): The function to be decorated.
-
-    Returns:
-        function: The decorated function.
-    """
-    
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        clear_screen()
-        func(*args, **kwargs)
-    return wrapper
-
 
 def repeat(reps: int=2):
     """Decorate a function such that it is executed multiple times.
@@ -60,9 +34,33 @@ def repeat(reps: int=2):
     return deco_repeat
 
 
-@repeat(5)
-def clear_5_lines() -> None:
-    print("\033[2K", "\033[1F", "\033[0K", sep="", end="")
+def clear_screen() -> None:
+    print("\033c", "\033[H", sep="", end="")
+
+
+def clear_lines(lines: int=1) -> None:
+    @repeat(lines)
+    def clear_multiple_lines() -> None:
+        print("\033[2K", "\033[1F", "\033[0K", sep="", end="")
+    
+    clear_multiple_lines()
+
+
+def clear_screen_deco(func):
+    """Decorate a function such that the screen is cleared before its execution.
+
+    Args:
+        func (function): The function to be decorated.
+
+    Returns:
+        function: The decorated function.
+    """
+    
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        clear_screen()
+        func(*args, **kwargs)
+    return wrapper
 
 
 def display(text, pause: int=3) -> None:
@@ -108,10 +106,10 @@ def yes_or_no(prompt: str) -> bool:
         response = input(prompt + "(Y/N) ").lower().strip()
         match response:
             case "y":
-                clear_line()
+                clear_lines()
                 return True
             case "n":
-                clear_line()
+                clear_lines()
                 return False
             case _:
                 display("Please provide a valid response.")
@@ -131,7 +129,7 @@ def backtrack(target: str) -> str:
         if not input(f"\nPress enter to return to {target}."):
             return f"Returning to {target}..."
         else:
-            clear_line()
+            clear_lines()
 
 
 class DuplicateError (Exception):

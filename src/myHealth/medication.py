@@ -181,7 +181,7 @@ class Medicine:
                 else:
                     raise ValueError("Invalid data.")
             except ValueError:
-                utility.display("Please enter valid data.", 2)
+                utility.display("Please enter some valid text.", 2)
 
     @staticmethod
     def get_string(prompt: str) -> str:
@@ -622,7 +622,7 @@ def query() -> tuple[str, str]:
                         break
                     else:
                         utility.display("Invalid input. Please try again.")
-                        utility.clear_5_lines()
+                        utility.clear_lines(5)
                 break
                  
     return category, search
@@ -769,13 +769,14 @@ def edit_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
                                 target.units = input(f"Please provide the units. ")
                                 break
                             except ValueError:
-                                utility.display("Please enter a valid unit.")
+                                utility.display("Please enter a valid dose unit (g/mg/mcg/units).")
                     else:
                         target.units = None
 
                 if utility.yes_or_no(f"Do you want to change the dosage times of {target.name.title()}? "):
                     while True:
-                        updated_times = copy.deepcopy(target.times)
+                        # Not a backup, just a vehicle to activate the setter.
+                        updated_times = target.times.copy()
                         
                         while True:
                             try:
@@ -793,33 +794,40 @@ def edit_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
                                 
                             except KeyError:
                                 utility.display("Please select a valid dosage time to be changed.")
-                                utility.clear_5_lines()
+                                utility.clear_lines(5)
                         
                         if time_to_change in Medicine.TIMES:
                             while True:
                                 try:                                
                                     if time_to_change == "AAWN":
                                         updated_times["AAWN"] = input("How many doses should be taken as and when necessary? ")
+                                        # The setter is only activated when the whole property is changed.
+                                        target.times = updated_times
+                                        
+                                        utility.display("All other dosage times will be set to 0.")
                                         for other_times in Medicine.TIMES:
                                             if not "AAWN": updated_times[other_times] = 0
-                                        utility.display("All other dosage times will be set to 0.")
+                                        utility.clear_lines(7)
                                         
                                     else:
                                         updated_times[time_to_change] = input(f"How many doses should be taken {Medicine.TIMES[time_to_change]}? ")
+                                        target.times = updated_times
+                                        
                                         if updated_times[time_to_change] > 0 and updated_times["AAWN"] > 0:
-                                            updated_times["AAWN"] = 0
                                             utility.display("AAWN will be set to 0.")
-                                    
-                                    target.times = updated_times
-                                    break
-
+                                            updated_times["AAWN"] = 0
+                                            utility.clear_lines(7)
+                                        else:
+                                            utility.clear_lines(8)
+                                            
                                 except ValueError:
-                                    utility.display("Please enter a valid number of doses.")
+                                    utility.display("Please enter a valid positive whole number number of doses.")
+                                
+                                else:
+                                    break
                                     
                         else:
                             break
-
-                print(f"This is the new entry for {target.name.title()}", target, sep="\n")
             
             else:
                 raise KeyError("Medication not found.")
@@ -828,6 +836,8 @@ def edit_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
             return backup, "\nAction disrupted. No changes will be made. Returning to myMedication..."
         
         else:
+            utility.clear_lines(7)
+            print(f"This is the new entry for {target.name.title()}", target, sep="\n")
             return new_med_data, utility.backtrack("myMedication")
 
 
