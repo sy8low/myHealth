@@ -820,14 +820,15 @@ def edit_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
                             break
 
                 print(f"This is the new entry for {target.name.title()}", target, sep="\n")
-                
-                return new_med_data, utility.backtrack("myMedication")
             
             else:
                 raise KeyError("Medication not found.")
             
         except KeyboardInterrupt:
             return backup, "\nAction disrupted. No changes will be made. Returning to myMedication..."
+        
+        else:
+            return new_med_data, utility.backtrack("myMedication")
 
 
 def remove_medication(med_data: list[Medicine]) -> tuple[list[Medicine], str]:
