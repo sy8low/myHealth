@@ -225,7 +225,7 @@ def view_menu_vitals(vitalsdb: pd.DataFrame) -> None:
                     target_date: pd.Timestamp = Input.get_datetime()
                     # A shallow copy will do as we're not manipulating entries.
                     start = perf_counter()
-                    target: int = search_vitals_3(vitalsdb, target_date)
+                    target: int = search_vitals_2(vitalsdb, target_date)
                     end = perf_counter()
                     utility.clear_and_display(f"{target_date.date()} has been selected... {end - start:.5f} seconds.")
                                        
