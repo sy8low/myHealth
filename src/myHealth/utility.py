@@ -1,9 +1,9 @@
 """utility implements helper functions and exceptions used in the user interface.
 
 Functions:
-    repeat              : Decorate a function such that it is executed multiple times.
-    clear_screen
-    clear_lines
+    repeat              : Decorate a function such that it is executed multiple times. 
+    clear_lines         : Clear a specified number of lines.
+    clear_screen        : Clear the entire terminal window.
     clear_screen_deco   : Decorate a function such that the screen is cleared before its execution.
     display             : Print a line of text on the terminal window and clear it after the stipulated period.
     clear_and_display   : Clear the screen before printing a line of text for a stipulated period.
@@ -21,7 +21,7 @@ def repeat(reps: int=2):
     """Decorate a function such that it is executed multiple times.
 
     Args:
-        reps (int, optional): The number of repetitions. Defaults to 2.
+        reps (optional): The number of repetitions. Defaults to 2.
     """
     
     def deco_repeat(func):
@@ -34,17 +34,24 @@ def repeat(reps: int=2):
     return deco_repeat
 
 
-def clear_screen() -> None:
-    print("\033c", "\033[H", sep="", end="")
-
-
 def clear_lines(lines: int=1) -> None:
+    """Clear a specified number of lines.
+
+    Args:
+        lines (optional): The number of lines to be cleared. Defaults to 1.
+    """
+    
     @repeat(lines)
     def clear_multiple_lines() -> None:
         print("\033[2K", "\033[1F", "\033[0K", sep="", end="")
     
     clear_multiple_lines()
 
+
+def clear_screen() -> None:
+    """Clear the entire terminal window."""
+    print("\033c", "\033[H", sep="", end="")
+    
 
 def clear_screen_deco(func):
     """Decorate a function such that the screen is cleared before its execution.
