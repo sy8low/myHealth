@@ -344,7 +344,6 @@ class test_add_medication(unittest.TestCase):
 
 
 class test_edit_medication(unittest.TestCase):
-    # Setter will not be tested here, as it'll be tested under test_select_medication.
     # Numbers left as int/float because setter cannot be activated. No data validation here as we're dealing with mocks.
     # Unable to change name without calling constructor or configure_mock.
     @patch("builtins.input", side_effect=["painkiller", 500, "mg", "aa", " bb ", 2, "aawn", 1, "", "void", ""])
@@ -514,7 +513,8 @@ class test_load_medication(unittest.TestCase):
 
     @patch("builtins.open", autospec=True)
     @patch("csv.DictReader", autospec=True)
-    def test_invalid_database(self, mock_DictReader, mock_open):  # Proxy for testing Medicine.__init__ and the setters.
+    # Another way to test Medicine.__init__ and the setters.
+    def test_invalid_database(self, mock_DictReader, mock_open):
         
         mock_DictReader.return_value = [mock_entries.INVALID_EMPTY_NAME_CSV]
         with self.assertRaises(ValueError):
