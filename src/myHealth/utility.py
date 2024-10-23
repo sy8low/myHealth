@@ -81,7 +81,8 @@ def display(text, pause: int=3) -> None:
         
     print(text)
     sleep(pause)
-    print("\033[1F", "\033[2K", sep="", end="")
+    for _ in range(2):
+        print("\033[1F", "\033[2K", sep="", end="")
 
 
 @clear_screen_deco
