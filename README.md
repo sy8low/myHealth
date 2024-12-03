@@ -8,7 +8,7 @@ It’s made up of two mini apps:
 
 - **🫀 myVitals**, which tracks the patient’s vital signs.
 
-Click **[here](https://drive.google.com/file/d/1hd4SNK1EVIpNFSmp5C7Oc11IkkH_AsEr/view?usp=drive_link)** to read my project discussion.
+Click **[here](https://drive.google.com/file/d/1hd4SNK1EVIpNFSmp5C7Oc11IkkH_AsEr/view?usp=drive_link)** to read my project discussion (design choices, challenges, and reflections not in the README below).
 
 Click **[here](https://www.youtube.com/watch?v=v23E7wb9Ykc)** to watch a video explaining the project, and **[here](https://youtu.be/m4ajPOf_JE8)** to watch a demonstration.
 
